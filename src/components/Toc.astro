@@ -23,6 +23,17 @@ const { headings = [] } = Astro.props;
     align-self: start;
   }
 
+  @media (min-width: 981px) {
+    .toc {
+      position: sticky;
+      top: clamp(5.5rem, 12vh, 8.5rem);
+      max-height: calc(100vh - clamp(5.5rem, 12vh, 8.5rem) - 1rem);
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+  }
+
   .toc ul {
     list-style: none;
     padding: 0;
