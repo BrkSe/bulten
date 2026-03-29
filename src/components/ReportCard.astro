@@ -1,19 +1,27 @@
 ---
-import { withBase } from '../lib/paths.js';
-import { formatDateLong } from '../lib/reports.js';
+import { withBase } from "../lib/paths.js";
+import { formatDateLong } from "../lib/reports.js";
 
 const { report, showFeed = true } = Astro.props;
 ---
 
-<article class="report-card panel" style={`--report-accent: ${report.feed.accent};`}>
+<article
+  class="report-card panel"
+  style={`--report-accent: ${report.feed.accent};`}
+>
   <div class="report-card__meta">
     <span class="meta-pill meta-pill--issue">Sayı {report.issueNumber}</span>
     <span class="meta-pill">{formatDateLong(report.date)}</span>
-    {showFeed && (
-      <a class="meta-pill report-card__feed-link" href={withBase(report.feedRoute)}>
-        {report.feed.shortTitle}
-      </a>
-    )}
+    {
+      showFeed && (
+        <a
+          class="meta-pill report-card__feed-link"
+          href={withBase(report.feedRoute)}
+        >
+          {report.feed.shortTitle}
+        </a>
+      )
+    }
     <span class="meta-pill">{report.readingMinutes} dk</span>
   </div>
 
@@ -23,13 +31,13 @@ const { report, showFeed = true } = Astro.props;
 
   <p>{report.excerpt}</p>
 
-  {report.tags.length > 0 && (
+  <!-- {report.tags.length > 0 && (
     <div class="pill-row">
       {report.tags.slice(0, 4).map((tag) => (
         <span class="tag-pill">{tag}</span>
       ))}
     </div>
-  )}
+  )} -->
 </article>
 
 <style>
@@ -37,10 +45,22 @@ const { report, showFeed = true } = Astro.props;
     padding: 1.35rem;
     display: grid;
     gap: 1rem;
-    border-color: color-mix(in srgb, var(--report-accent) 24%, var(--line-strong));
+    border-color: color-mix(
+      in srgb,
+      var(--report-accent) 24%,
+      var(--line-strong)
+    );
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 238, 0.96)),
-      radial-gradient(circle at top right, color-mix(in srgb, var(--report-accent) 12%, rgba(255, 255, 255, 0.92)), transparent 40%);
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.82),
+        rgba(255, 248, 238, 0.96)
+      ),
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--report-accent) 12%, rgba(255, 255, 255, 0.92)),
+        transparent 40%
+      );
     box-shadow: var(--shadow-soft);
   }
 

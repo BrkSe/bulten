@@ -1,6 +1,6 @@
 ---
-import { withBase } from '../lib/paths.js';
-import { formatDateLong } from '../lib/reports.js';
+import { withBase } from "../lib/paths.js";
+import { formatDateLong } from "../lib/reports.js";
 
 const { feed, latestReport, totalReports } = Astro.props;
 ---
@@ -14,23 +14,27 @@ const { feed, latestReport, totalReports } = Astro.props;
   <h3>{feed.shortTitle}</h3>
   <p>{feed.description}</p>
 
-  <div class="feed-card__meta">
+  <!-- <div class="feed-card__meta">
     <span>Otomasyon: {feed.automationName}</span>
     <span>Klasör: <code>{feed.directory}</code></span>
-  </div>
+  </div> -->
 
-  {latestReport && (
-    <a class="feed-card__latest" href={withBase(latestReport.route)}>
-      <small>En yeni sayı</small>
-      <span class="feed-card__issue">Sayı {latestReport.issueNumber}</span>
-      <strong>{latestReport.title}</strong>
-      <span class="feed-card__date">{formatDateLong(latestReport.date)}</span>
-    </a>
-  )}
+  {
+    latestReport && (
+      <a class="feed-card__latest" href={withBase(latestReport.route)}>
+        <small>En yeni sayı</small>
+        <span class="feed-card__issue">Sayı {latestReport.issueNumber}</span>
+        <strong>{latestReport.title}</strong>
+        <span class="feed-card__date">{formatDateLong(latestReport.date)}</span>
+      </a>
+    )
+  }
 
   <div class="button-row">
-    <a class="button button--primary" href={withBase(`kaynak/${feed.id}/`)}>Akışı Aç</a>
-    <a class="button" href={withBase(`kaynak/${feed.id}/rss.xml`)}>RSS</a>
+    <a class="button button--primary" href={withBase(`kaynak/${feed.id}/`)}
+      >Akışı Aç</a
+    >
+    <!-- <a class="button" href={withBase(`kaynak/${feed.id}/rss.xml`)}>RSS</a> -->
   </div>
 </article>
 
@@ -40,10 +44,22 @@ const { feed, latestReport, totalReports } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border-color: color-mix(in srgb, var(--feed-accent) 28%, var(--line-strong));
+    border-color: color-mix(
+      in srgb,
+      var(--feed-accent) 28%,
+      var(--line-strong)
+    );
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 247, 236, 0.95)),
-      radial-gradient(circle at top right, color-mix(in srgb, var(--feed-accent) 14%, rgba(255, 255, 255, 0.92)), transparent 38%);
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.8),
+        rgba(255, 247, 236, 0.95)
+      ),
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--feed-accent) 14%, rgba(255, 255, 255, 0.92)),
+        transparent 38%
+      );
     box-shadow: var(--shadow-soft);
   }
 
