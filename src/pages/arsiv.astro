@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ReportCard from '../components/ReportCard.astro';
-import { getAllReports, formatMonthLabel } from '../lib/reports.js';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ReportCard from "../components/ReportCard.astro";
+import { getAllReports, formatMonthLabel } from "../lib/reports.js";
 
 const reports = getAllReports();
 
@@ -36,7 +36,10 @@ const tagFilters = Array.from(
   }, new Map()),
   ([label, count]) => ({ label, count }),
 )
-  .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label, 'tr'))
+  .sort(
+    (left, right) =>
+      right.count - left.count || left.label.localeCompare(right.label, "tr"),
+  )
   .slice(0, 14);
 
 const groups = Array.from(
@@ -59,8 +62,8 @@ const groups = Array.from(
       <p class="eyebrow">Tam arşiv</p>
       <h1>Tüm radar sayıları tek bakışta.</h1>
       <p>
-        Akış bağımsızlığını korurken, bütün sayılar tek bir kronolojik yayında toplanıyor. Yeni markdown
-        dosyası geldiğinde bu sayfa da kendini otomatik genişletiyor.
+        Akış bağımsızlığını korurken, bütün sayılar tek bir kronolojik yayında
+        toplanıyor.
       </p>
     </section>
 
@@ -91,28 +94,39 @@ const groups = Array.from(
 
       <div class="filter-block">
         <div class="filter-block__label">Kaynak</div>
-        <div class="filter-chip-row" role="group" aria-label="Kaynak filtreleri">
-          <button class="filter-chip is-active" type="button" data-feed-filter="" data-filter-label="Tümü">
+        <div
+          class="filter-chip-row"
+          role="group"
+          aria-label="Kaynak filtreleri"
+        >
+          <button
+            class="filter-chip is-active"
+            type="button"
+            data-feed-filter=""
+            data-filter-label="Tümü"
+          >
             <span>Tümü</span>
             <small>{reports.length}</small>
           </button>
 
-          {feedFilters.map((feed) => (
-            <button
-              class="filter-chip"
-              type="button"
-              style={`--filter-accent: ${feed.accent};`}
-              data-feed-filter={feed.id}
-              data-filter-label={feed.label}
-            >
-              <span>{feed.label}</span>
-              <small>{feed.count}</small>
-            </button>
-          ))}
+          {
+            feedFilters.map((feed) => (
+              <button
+                class="filter-chip"
+                type="button"
+                style={`--filter-accent: ${feed.accent};`}
+                data-feed-filter={feed.id}
+                data-filter-label={feed.label}
+              >
+                <span>{feed.label}</span>
+                <small>{feed.count}</small>
+              </button>
+            ))
+          }
         </div>
       </div>
 
-      {tagFilters.length > 0 && (
+      <!-- {tagFilters.length > 0 && (
         <div class="filter-block">
           <div class="filter-block__label">Etiket</div>
           <div class="filter-chip-row" role="group" aria-label="Etiket filtreleri">
@@ -133,7 +147,7 @@ const groups = Array.from(
             ))}
           </div>
         </div>
-      )}
+      )} -->
 
       <p class="active-filters" data-active-filters hidden></p>
     </section>
@@ -145,30 +159,41 @@ const groups = Array.from(
     </section>
 
     <div class="archive-groups">
-      {groups.map(([label, monthReports]) => (
-        <section class="archive-group" data-month-group>
-          <div class="section-title">
-            <h2>{label}</h2>
-            <p><span data-group-count>{monthReports.length}</span> sayı</p>
-          </div>
+      {
+        groups.map(([label, monthReports]) => (
+          <section class="archive-group" data-month-group>
+            <div class="section-title">
+              <h2>{label}</h2>
+              <p>
+                <span data-group-count>{monthReports.length}</span> sayı
+              </p>
+            </div>
 
-          <div class="grid-two">
-            {monthReports.map((report) => (
-              <div
-                class="archive-card"
-                data-report-card
-                data-feed={report.feed.id}
-                data-tags={report.tags.map((tag) => tag.toLocaleLowerCase('tr-TR')).join('|')}
-                data-search={[report.title, report.excerpt, report.feed.shortTitle, ...report.tags]
-                  .join(' ')
-                  .toLocaleLowerCase('tr-TR')}
-              >
-                <ReportCard report={report} />
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
+            <div class="grid-two">
+              {monthReports.map((report) => (
+                <div
+                  class="archive-card"
+                  data-report-card
+                  data-feed={report.feed.id}
+                  data-tags={report.tags
+                    .map((tag) => tag.toLocaleLowerCase("tr-TR"))
+                    .join("|")}
+                  data-search={[
+                    report.title,
+                    report.excerpt,
+                    report.feed.shortTitle,
+                    ...report.tags,
+                  ]
+                    .join(" ")
+                    .toLocaleLowerCase("tr-TR")}
+                >
+                  <ReportCard report={report} />
+                </div>
+              ))}
+            </div>
+          </section>
+        ))
+      }
     </div>
   </div>
 </BaseLayout>
@@ -182,13 +207,21 @@ const groups = Array.from(
   .archive-hero {
     padding: clamp(1.4rem, 3vw, 2rem);
     background:
-      radial-gradient(circle at top right, rgba(47, 125, 116, 0.09), transparent 32%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 248, 238, 0.94));
+      radial-gradient(
+        circle at top right,
+        rgba(47, 125, 116, 0.09),
+        transparent 32%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.68),
+        rgba(255, 248, 238, 0.94)
+      );
   }
 
   .archive-hero h1 {
     margin: 0 0 0.8rem;
-    font-family: 'Newsreader', serif;
+    font-family: "Newsreader", serif;
     font-size: clamp(2.6rem, 4vw, 3.6rem);
     color: var(--text-strong);
   }
@@ -210,8 +243,16 @@ const groups = Array.from(
     display: grid;
     gap: 1.15rem;
     background:
-      radial-gradient(circle at top left, rgba(201, 108, 69, 0.08), transparent 28%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 251, 244, 0.95));
+      radial-gradient(
+        circle at top left,
+        rgba(201, 108, 69, 0.08),
+        transparent 28%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 251, 244, 0.95)
+      );
   }
 
   .archive-toolbar__top {
@@ -224,7 +265,7 @@ const groups = Array.from(
 
   .archive-toolbar__top h2 {
     margin: 0;
-    font-family: 'Newsreader', serif;
+    font-family: "Newsreader", serif;
     font-size: clamp(1.8rem, 2.6vw, 2.45rem);
     color: var(--text-strong);
   }
@@ -303,21 +344,37 @@ const groups = Array.from(
     color: var(--muted);
     font: inherit;
     cursor: pointer;
-    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease,
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease,
       box-shadow 160ms ease;
   }
 
   .filter-chip:hover {
     transform: translateY(-1px);
-    border-color: color-mix(in srgb, var(--filter-accent, var(--cool)) 32%, var(--line-strong));
+    border-color: color-mix(
+      in srgb,
+      var(--filter-accent, var(--cool)) 32%,
+      var(--line-strong)
+    );
     color: var(--text-strong);
     background: rgba(255, 255, 255, 0.84);
   }
 
   .filter-chip.is-active {
     color: var(--text-strong);
-    border-color: color-mix(in srgb, var(--filter-accent, var(--cool)) 40%, var(--line-strong));
-    background: color-mix(in srgb, var(--filter-accent, var(--cool)) 10%, rgba(255, 255, 255, 0.9));
+    border-color: color-mix(
+      in srgb,
+      var(--filter-accent, var(--cool)) 40%,
+      var(--line-strong)
+    );
+    background: color-mix(
+      in srgb,
+      var(--filter-accent, var(--cool)) 10%,
+      rgba(255, 255, 255, 0.9)
+    );
     box-shadow: var(--shadow-soft);
   }
 
@@ -338,12 +395,16 @@ const groups = Array.from(
     text-align: center;
     background:
       radial-gradient(circle at top, rgba(201, 108, 69, 0.08), transparent 30%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 249, 241, 0.95));
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.72),
+        rgba(255, 249, 241, 0.95)
+      );
   }
 
   .archive-empty h3 {
     margin: 0 0 0.65rem;
-    font-family: 'Newsreader', serif;
+    font-family: "Newsreader", serif;
     font-size: 2rem;
     color: var(--text-strong);
   }
@@ -367,41 +428,53 @@ const groups = Array.from(
 </style>
 
 <script is:inline>
-  const filterRoot = document.querySelector('[data-filter-root]');
+  const filterRoot = document.querySelector("[data-filter-root]");
 
   if (filterRoot) {
-    const searchInput = filterRoot.querySelector('[data-search]');
-    const resetButton = filterRoot.querySelector('[data-reset]');
-    const resultCount = filterRoot.querySelector('[data-results-count]');
-    const activeFilters = filterRoot.querySelector('[data-active-filters]');
-    const emptyState = document.querySelector('[data-empty-state]');
-    const cards = Array.from(document.querySelectorAll('[data-report-card]'));
-    const groups = Array.from(document.querySelectorAll('[data-month-group]'));
-    const feedButtons = Array.from(filterRoot.querySelectorAll('[data-feed-filter]'));
-    const tagButtons = Array.from(filterRoot.querySelectorAll('[data-tag-filter]'));
+    const searchInput = filterRoot.querySelector("[data-search]");
+    const resetButton = filterRoot.querySelector("[data-reset]");
+    const resultCount = filterRoot.querySelector("[data-results-count]");
+    const activeFilters = filterRoot.querySelector("[data-active-filters]");
+    const emptyState = document.querySelector("[data-empty-state]");
+    const cards = Array.from(document.querySelectorAll("[data-report-card]"));
+    const groups = Array.from(document.querySelectorAll("[data-month-group]"));
+    const feedButtons = Array.from(
+      filterRoot.querySelectorAll("[data-feed-filter]"),
+    );
+    const tagButtons = Array.from(
+      filterRoot.querySelectorAll("[data-tag-filter]"),
+    );
 
     const state = {
-      search: '',
-      feed: '',
-      tag: '',
+      search: "",
+      feed: "",
+      tag: "",
     };
 
-    const normalize = (value) => value.toLocaleLowerCase('tr-TR').trim();
+    const normalize = (value) => value.toLocaleLowerCase("tr-TR").trim();
 
     function setActive(buttons, key, currentValue) {
       buttons.forEach((button) => {
-        button.classList.toggle('is-active', (button.dataset[key] || '') === currentValue);
+        button.classList.toggle(
+          "is-active",
+          (button.dataset[key] || "") === currentValue,
+        );
       });
     }
 
     function getButtonLabel(buttons, key, currentValue) {
-      return buttons.find((button) => (button.dataset[key] || '') === currentValue)?.dataset.filterLabel || '';
+      return (
+        buttons.find((button) => (button.dataset[key] || "") === currentValue)
+          ?.dataset.filterLabel || ""
+      );
     }
 
     function syncGroupCounts() {
       groups.forEach((group) => {
-        const visibleCards = group.querySelectorAll('[data-report-card]:not([hidden])').length;
-        const countNode = group.querySelector('[data-group-count]');
+        const visibleCards = group.querySelectorAll(
+          "[data-report-card]:not([hidden])",
+        ).length;
+        const countNode = group.querySelector("[data-group-count]");
 
         if (countNode) {
           countNode.textContent = String(visibleCards);
@@ -415,11 +488,15 @@ const groups = Array.from(
       const summary = [];
 
       if (state.feed) {
-        summary.push(`Kaynak: ${getButtonLabel(feedButtons, 'feedFilter', state.feed)}`);
+        summary.push(
+          `Kaynak: ${getButtonLabel(feedButtons, "feedFilter", state.feed)}`,
+        );
       }
 
       if (state.tag) {
-        summary.push(`Etiket: ${getButtonLabel(tagButtons, 'tagFilter', state.tag)}`);
+        summary.push(
+          `Etiket: ${getButtonLabel(tagButtons, "tagFilter", state.tag)}`,
+        );
       }
 
       if (state.search) {
@@ -427,7 +504,7 @@ const groups = Array.from(
       }
 
       activeFilters.hidden = summary.length === 0;
-      activeFilters.textContent = summary.join(' • ');
+      activeFilters.textContent = summary.join(" • ");
       emptyState.hidden = visibleCount !== 0;
     }
 
@@ -436,9 +513,10 @@ const groups = Array.from(
 
       cards.forEach((card) => {
         const matchesFeed = !state.feed || card.dataset.feed === state.feed;
-        const tags = card.dataset.tags ? card.dataset.tags.split('|') : [];
+        const tags = card.dataset.tags ? card.dataset.tags.split("|") : [];
         const matchesTag = !state.tag || tags.includes(state.tag);
-        const matchesSearch = !state.search || (card.dataset.search || '').includes(state.search);
+        const matchesSearch =
+          !state.search || (card.dataset.search || "").includes(state.search);
         const isVisible = matchesFeed && matchesTag && matchesSearch;
 
         card.hidden = !isVisible;
@@ -454,44 +532,44 @@ const groups = Array.from(
     }
 
     function resetFilters() {
-      state.search = '';
-      state.feed = '';
-      state.tag = '';
-      searchInput.value = '';
-      setActive(feedButtons, 'feedFilter', '');
-      setActive(tagButtons, 'tagFilter', '');
+      state.search = "";
+      state.feed = "";
+      state.tag = "";
+      searchInput.value = "";
+      setActive(feedButtons, "feedFilter", "");
+      setActive(tagButtons, "tagFilter", "");
       applyFilters();
     }
 
-    searchInput?.addEventListener('input', (event) => {
+    searchInput?.addEventListener("input", (event) => {
       state.search = normalize(event.currentTarget.value);
       applyFilters();
     });
 
     feedButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const nextValue = button.dataset.feedFilter || '';
-        state.feed = state.feed === nextValue ? '' : nextValue;
-        setActive(feedButtons, 'feedFilter', state.feed);
+      button.addEventListener("click", () => {
+        const nextValue = button.dataset.feedFilter || "";
+        state.feed = state.feed === nextValue ? "" : nextValue;
+        setActive(feedButtons, "feedFilter", state.feed);
         applyFilters();
       });
     });
 
     tagButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const nextValue = normalize(button.dataset.tagFilter || '');
-        state.tag = state.tag === nextValue ? '' : nextValue;
-        setActive(tagButtons, 'tagFilter', state.tag);
+      button.addEventListener("click", () => {
+        const nextValue = normalize(button.dataset.tagFilter || "");
+        state.tag = state.tag === nextValue ? "" : nextValue;
+        setActive(tagButtons, "tagFilter", state.tag);
 
         if (!state.tag) {
-          setActive(tagButtons, 'tagFilter', '');
+          setActive(tagButtons, "tagFilter", "");
         }
 
         applyFilters();
       });
     });
 
-    resetButton?.addEventListener('click', resetFilters);
+    resetButton?.addEventListener("click", resetFilters);
     applyFilters();
   }
 </script>

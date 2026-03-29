@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ReportCard from '../../../components/ReportCard.astro';
-import { withBase } from '../../../lib/paths.js';
-import { getFeeds, getReportsByFeedId } from '../../../lib/reports.js';
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ReportCard from "../../../components/ReportCard.astro";
+import { withBase } from "../../../lib/paths.js";
+import { getFeeds, getReportsByFeedId } from "../../../lib/reports.js";
 
 export function getStaticPaths() {
   return getFeeds().map((feed) => ({
@@ -27,30 +27,36 @@ const latestReport = reports[0] ?? null;
 
       <div class="meta-row">
         <span class="meta-pill">{reports.length} sayı</span>
-        <span class="meta-pill">Otomasyon: {feed.automationName}</span>
-        <span class="meta-pill">Klasör: {feed.directory}</span>
+        <!-- <span class="meta-pill">Otomasyon: {feed.automationName}</span>
+        <span class="meta-pill">Klasör: {feed.directory}</span> -->
       </div>
     </div>
 
     <div class="source-hero__actions">
-      <a class="button button--primary" href={latestReport ? withBase(latestReport.route) : withBase()}>
-        {latestReport ? 'En yeni sayıyı aç' : 'Ana sayfa'}
+      <a
+        class="button button--primary"
+        href={latestReport ? withBase(latestReport.route) : withBase()}
+      >
+        {latestReport ? "En yeni sayıyı aç" : "Ana sayfa"}
       </a>
-      <a class="button" href={withBase(`kaynak/${feed.id}/rss.xml`)}>Akış RSS</a>
-      <a class="button" href={withBase('opml.xml')}>OPML</a>
+      <!-- <a class="button" href={withBase(`kaynak/${feed.id}/rss.xml`)}>Akış RSS</a>
+      <a class="button" href={withBase('opml.xml')}>OPML</a> -->
     </div>
   </section>
 
-  {latestReport && (
-    <section class="section-block">
-      <div class="section-title">
-        <h2>Öne çıkan sayı</h2>
-        <p>Bu akışın en son yayınlanan baskısı.</p>
-      </div>
+  {
+    latestReport && (
+      <section class="section-block">
+        <br />
+        <div class="section-title">
+          <h2>Öne çıkan sayı</h2>
+          <p>Bu akışın en son yayınlanan baskısı.</p>
+        </div>
 
-      <ReportCard report={latestReport} showFeed={false} />
-    </section>
-  )}
+        <ReportCard report={latestReport} showFeed={false} />
+      </section>
+    )
+  }
 
   <section class="section-block">
     <div class="section-title">
@@ -59,9 +65,7 @@ const latestReport = reports[0] ?? null;
     </div>
 
     <div class="grid-two">
-      {reports.map((report) => (
-        <ReportCard report={report} showFeed={false} />
-      ))}
+      {reports.map((report) => <ReportCard report={report} showFeed={false} />)}
     </div>
   </section>
 </BaseLayout>
@@ -76,15 +80,23 @@ const latestReport = reports[0] ?? null;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 1rem;
-    border-color: color-mix(in srgb, var(--source-accent) 30%, var(--line-strong));
+    border-color: color-mix(
+      in srgb,
+      var(--source-accent) 30%,
+      var(--line-strong)
+    );
     background:
-      radial-gradient(circle at top right, color-mix(in srgb, var(--source-accent) 15%, rgba(255, 255, 255, 0.9)), transparent 34%),
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--source-accent) 15%, rgba(255, 255, 255, 0.9)),
+        transparent 34%
+      ),
       var(--panel);
   }
 
   .source-hero h1 {
     margin: 0 0 0.8rem;
-    font-family: 'Newsreader', serif;
+    font-family: "Newsreader", serif;
     font-size: clamp(2.7rem, 4vw, 3.8rem);
     line-height: 1.02;
     max-width: 16ch;
