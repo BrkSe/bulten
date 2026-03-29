@@ -15,7 +15,10 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
 <BaseLayout title={report.title} description={report.excerpt}>
   <section class="article-hero panel" style={`--article-accent: ${report.feed.accent};`}>
     <div class="article-hero__body">
-      <a class="article-hero__source" href={withBase(report.feedRoute)}>{report.feed.shortTitle}</a>
+      <div class="article-hero__topline">
+        <a class="article-hero__source" href={withBase(report.feedRoute)}>{report.feed.shortTitle}</a>
+        <span class="article-hero__issue">Sayı {report.issueNumber}</span>
+      </div>
       <h1>{report.title}</h1>
       <p>{report.excerpt}</p>
 
@@ -90,6 +93,24 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--muted);
+  }
+
+  .article-hero__topline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    margin-bottom: 0.85rem;
+  }
+
+  .article-hero__issue {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    color: #0b1118;
+    background: color-mix(in srgb, var(--article-accent) 88%, white 12%);
+    font-weight: 700;
   }
 
   .article-hero h1 {
@@ -167,4 +188,3 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     }
   }
 </style>
-

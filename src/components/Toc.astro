@@ -19,8 +19,6 @@ const { headings = [] } = Astro.props;
 
 <style>
   .toc {
-    position: sticky;
-    top: 1.2rem;
     padding: 1.25rem;
     align-self: start;
   }
@@ -49,11 +47,4 @@ const { headings = [] } = Astro.props;
   .toc a:hover {
     color: var(--text);
   }
-
-  @media (max-width: 980px) {
-    .toc {
-      position: static;
-    }
-  }
 </style>
-

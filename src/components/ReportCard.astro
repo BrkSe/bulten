@@ -7,6 +7,7 @@ const { report, showFeed = true } = Astro.props;
 
 <article class="report-card panel" style={`--report-accent: ${report.feed.accent};`}>
   <div class="report-card__meta">
+    <span class="meta-pill meta-pill--issue">Sayı {report.issueNumber}</span>
     <span class="meta-pill">{formatDateLong(report.date)}</span>
     {showFeed && (
       <a class="meta-pill report-card__feed-link" href={withBase(report.feedRoute)}>
@@ -53,6 +54,13 @@ const { report, showFeed = true } = Astro.props;
     color: var(--text);
   }
 
+  .meta-pill--issue {
+    color: #0b1118;
+    border-color: transparent;
+    background: color-mix(in srgb, var(--report-accent) 88%, white 12%);
+    font-weight: 700;
+  }
+
   .report-card h3 {
     margin: 0;
     font-size: clamp(1.4rem, 2vw, 1.75rem);
@@ -65,4 +73,3 @@ const { report, showFeed = true } = Astro.props;
     line-height: 1.75;
   }
 </style>
-

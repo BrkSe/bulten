@@ -79,11 +79,20 @@ function loadFeedReports(feed) {
     return [];
   }
 
-  return fs
+  const reports = fs
     .readdirSync(directory, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-    .map((entry) => buildReport(feed, path.join(directory, entry.name)))
-    .sort(compareReports);
+    .map((entry) => buildReport(feed, path.join(directory, entry.name)));
+
+  const numberedReports = reports
+    .slice()
+    .sort(compareReportsAscending)
+    .map((report, index) => ({
+      ...report,
+      issueNumber: index + 1,
+    }));
+
+  return numberedReports.sort(compareReports);
 }
 
 function buildReport(feed, absolutePath) {
@@ -125,6 +134,10 @@ function buildReport(feed, absolutePath) {
 
 function compareReports(left, right) {
   return right.date.localeCompare(left.date) || left.title.localeCompare(right.title, 'tr');
+}
+
+function compareReportsAscending(left, right) {
+  return left.date.localeCompare(right.date) || left.title.localeCompare(right.title, 'tr');
 }
 
 function extractHeadings(tokens) {

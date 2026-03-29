@@ -22,8 +22,9 @@ const { feed, latestReport, totalReports } = Astro.props;
   {latestReport && (
     <a class="feed-card__latest" href={withBase(latestReport.route)}>
       <small>En yeni sayı</small>
+      <span class="feed-card__issue">Sayı {latestReport.issueNumber}</span>
       <strong>{latestReport.title}</strong>
-      <span>{formatDateLong(latestReport.date)}</span>
+      <span class="feed-card__date">{formatDateLong(latestReport.date)}</span>
     </a>
   )}
 
@@ -101,7 +102,13 @@ const { feed, latestReport, totalReports } = Astro.props;
     font-size: 1.02rem;
   }
 
-  .feed-card__latest span {
+  .feed-card__issue {
+    color: color-mix(in srgb, var(--feed-accent) 88%, white 12%);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .feed-card__date {
     color: var(--muted);
     font-size: 0.9rem;
   }
@@ -110,4 +117,3 @@ const { feed, latestReport, totalReports } = Astro.props;
     font-size: 0.84rem;
   }
 </style>
-
