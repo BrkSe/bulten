@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "npm@11.11.0",
   "description": "Federated, AI-curated, fully static newsletter surface for daily radar markdown files.",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "generate:pages": "node ./scripts/generate-article-pages.mjs",
+    "dev": "npm run generate:pages && astro dev",
+    "build": "npm run generate:pages && astro build",
     "preview": "astro preview",
     "publish:reports": "bash ./scripts/publish-reports.sh"
   },
@@ -18,9 +20,13 @@
   ],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
-    "astro": "^5.18.1",
+    "astro": "^6.1.1",
     "gray-matter": "^4.0.3",
     "markdown-it": "^14.1.1",
     "markdown-it-anchor": "^9.2.0"

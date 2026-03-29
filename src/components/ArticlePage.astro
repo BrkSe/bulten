@@ -1,20 +1,11 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Toc from '../../../components/Toc.astro';
-import { withBase } from '../../../lib/paths.js';
-import { getAllReports, getReportsByFeedId, formatDateLong } from '../../../lib/reports.js';
-
-export function getStaticPaths() {
-  return getAllReports().map((report) => ({
-    params: {
-      feed: report.feed.id,
-      slug: report.slug,
-    },
-    props: { report },
-  }));
-}
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Toc from './Toc.astro';
+import { withBase } from '../lib/paths.js';
+import { getReportsByFeedId, formatDateLong } from '../lib/reports.js';
 
 const { report } = Astro.props;
+
 const feedReports = getReportsByFeedId(report.feed.id);
 const currentIndex = feedReports.findIndex((item) => item.slug === report.slug);
 const newerReport = currentIndex > 0 ? feedReports[currentIndex - 1] : null;
@@ -176,3 +167,4 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     }
   }
 </style>
+

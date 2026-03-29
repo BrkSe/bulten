@@ -1,12 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 import { feedDefinitions } from '../config/feeds.js';
 
-const projectRoot = fileURLToPath(new URL('../../', import.meta.url));
+const projectRoot = process.cwd();
 
 const markdown = new MarkdownIt({
   html: true,
@@ -39,6 +38,10 @@ export function getAllReports() {
 
 export function getReportsByFeedId(feedId) {
   return getAllReports().filter((report) => report.feed.id === feedId);
+}
+
+export function getReportByFeedAndSlug(feedId, slug) {
+  return getAllReports().find((report) => report.feed.id === feedId && report.slug === slug) ?? null;
 }
 
 export function getFeedSummaries() {
@@ -358,4 +361,3 @@ function slugify(value) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
-

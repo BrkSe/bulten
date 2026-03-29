@@ -29,6 +29,9 @@ npm install
 npm run dev
 ```
 
+Önerilen runtime: `Node 24.14.1` ve `npm 11.11.0`.
+Detay sayfaları build öncesinde otomatik üretilir; bunun için `npm run generate:pages` komutu da ayrıca vardır.
+
 Build testi:
 
 ```bash
@@ -63,4 +66,3 @@ Senin mevcut ajanların günlük markdown ürettiğinde bu repo içine commit/pu
 - sadece `dailytrend/` ve `dailyjava/` değişikliklerini stage eder,
 - önce build doğrulaması yapar,
 - ardından commit atıp mevcut branch'e pushlar.
-
