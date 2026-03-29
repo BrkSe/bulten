@@ -1,22 +1,28 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Toc from './Toc.astro';
-import { withBase } from '../lib/paths.js';
-import { getReportsByFeedId, formatDateLong } from '../lib/reports.js';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Toc from "./Toc.astro";
+import { withBase } from "../lib/paths.js";
+import { getReportsByFeedId, formatDateLong } from "../lib/reports.js";
 
 const { report } = Astro.props;
 
 const feedReports = getReportsByFeedId(report.feed.id);
 const currentIndex = feedReports.findIndex((item) => item.slug === report.slug);
 const newerReport = currentIndex > 0 ? feedReports[currentIndex - 1] : null;
-const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentIndex + 1] : null;
+const olderReport =
+  currentIndex < feedReports.length - 1 ? feedReports[currentIndex + 1] : null;
 ---
 
 <BaseLayout title={report.title} description={report.excerpt}>
-  <section class="article-hero panel" style={`--article-accent: ${report.feed.accent};`}>
+  <section
+    class="article-hero panel"
+    style={`--article-accent: ${report.feed.accent};`}
+  >
     <div class="article-hero__body">
       <div class="article-hero__topline">
-        <a class="article-hero__source" href={withBase(report.feedRoute)}>{report.feed.shortTitle}</a>
+        <a class="article-hero__source" href={withBase(report.feedRoute)}
+          >{report.feed.shortTitle}</a
+        >
         <span class="article-hero__issue">Sayı {report.issueNumber}</span>
       </div>
       <h1>{report.title}</h1>
@@ -25,23 +31,23 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
       <div class="meta-row">
         <span class="meta-pill">{formatDateLong(report.date)}</span>
         <span class="meta-pill">{report.readingMinutes} dk okuma</span>
-        <span class="meta-pill">{report.wordCount} kelime</span>
-        <span class="meta-pill">{report.sourcePath}</span>
       </div>
 
-      {report.tags.length > 0 && (
-        <div class="pill-row">
-          {report.tags.map((tag) => (
-            <span class="tag-pill">{tag}</span>
-          ))}
-        </div>
-      )}
+      <!-- {
+        report.tags.length > 0 && (
+          <div class="pill-row">
+            {report.tags.map((tag) => (
+              <span class="tag-pill">{tag}</span>
+            ))}
+          </div>
+        )
+      } -->
     </div>
   </section>
 
   <section class="article-grid">
     <article class="panel article-panel">
-      <div class="prose" set:html={report.html}></div>
+      <div class="prose" set:html={report.html} />
     </article>
 
     <Toc headings={report.headings} />
@@ -50,11 +56,13 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
   <section class="article-nav panel">
     <div class="article-nav__item">
       <small>Daha yeni</small>
-      {newerReport ? (
-        <a href={withBase(newerReport.route)}>{newerReport.title}</a>
-      ) : (
-        <span>Bu akışın en yeni sayısı.</span>
-      )}
+      {
+        newerReport ? (
+          <a href={withBase(newerReport.route)}>{newerReport.title}</a>
+        ) : (
+          <span>Bu akışın en yeni sayısı.</span>
+        )
+      }
     </div>
 
     <div class="article-nav__item article-nav__item--center">
@@ -64,11 +72,13 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
 
     <div class="article-nav__item article-nav__item--right">
       <small>Daha eski</small>
-      {olderReport ? (
-        <a href={withBase(olderReport.route)}>{olderReport.title}</a>
-      ) : (
-        <span>Bu akışın ilk sayısı.</span>
-      )}
+      {
+        olderReport ? (
+          <a href={withBase(olderReport.route)}>{olderReport.title}</a>
+        ) : (
+          <span>Bu akışın ilk sayısı.</span>
+        )
+      }
     </div>
   </section>
 </BaseLayout>
@@ -77,9 +87,17 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
   .article-hero {
     padding: 1.5rem;
     margin-bottom: 1.2rem;
-    border-color: color-mix(in srgb, var(--article-accent) 28%, var(--line-strong));
+    border-color: color-mix(
+      in srgb,
+      var(--article-accent) 28%,
+      var(--line-strong)
+    );
     background:
-      radial-gradient(circle at top right, color-mix(in srgb, var(--article-accent) 14%, rgba(255, 255, 255, 0.9)), transparent 36%),
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--article-accent) 14%, rgba(255, 255, 255, 0.9)),
+        transparent 36%
+      ),
       var(--panel);
   }
 
@@ -115,10 +133,10 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
 
   .article-hero h1 {
     margin: 0 0 0.9rem;
-    font-family: 'Newsreader', serif;
+    font-family: "Newsreader", serif;
     font-size: clamp(2.8rem, 4.4vw, 4.4rem);
     line-height: 1.02;
-    max-width: 14ch;
+    /* max-width: 14ch; */
     color: var(--text-strong);
   }
 
@@ -126,7 +144,7 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     margin: 0 0 1rem;
     color: var(--muted);
     line-height: 1.82;
-    max-width: 68ch;
+    /* max-width: 68ch; */
   }
 
   .article-grid {
