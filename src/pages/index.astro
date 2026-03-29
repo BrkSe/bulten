@@ -1,0 +1,161 @@
+---
+import FeedCard from '../components/FeedCard.astro';
+import ReportCard from '../components/ReportCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/paths.js';
+import { getAllReports, getFeedSummaries } from '../lib/reports.js';
+
+const reports = getAllReports();
+const feedSummaries = getFeedSummaries();
+const latestReports = reports.slice(0, 2);
+const recentReports = reports.slice(0, 6);
+const totalReports = reports.length;
+const totalReadingMinutes = reports.reduce((sum, report) => sum + report.readingMinutes, 0);
+const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
+---
+
+<BaseLayout>
+  <section class="hero panel">
+    <div class="hero__content">
+      <p class="eyebrow">Federated newsletter surface</p>
+      <h1>Markdown radar raporlarını okuması keyifli bir yayın akışına dönüştür.</h1>
+      <p class="hero__lede">
+        TrendRadar ve Java / Spring Ekosistem Teknoloji Radar Ajanı her gün içerik üretirken,
+        bu yüzey onların sayılarını tek bir statik yayında toplar. Push geldiği anda build alır,
+        GitHub Pages üzerinde ücretsiz yayınlar.
+      </p>
+
+      <div class="button-row">
+        <a class="button button--primary" href={withBase('arsiv/')}>Arşivi Aç</a>
+        <a class="button" href={withBase('opml.xml')}>OPML Export</a>
+        <a class="button" href={withBase('rss.xml')}>Global RSS</a>
+      </div>
+    </div>
+
+    <div class="hero__stats">
+      <div class="stat-card">
+        <strong>{feedSummaries.length}</strong>
+        <span>bağımsız akış</span>
+      </div>
+      <div class="stat-card">
+        <strong>{totalReports}</strong>
+        <span>yayınlanmış sayı</span>
+      </div>
+      <div class="stat-card">
+        <strong>{totalReadingMinutes} dk</strong>
+        <span>toplam okuma süresi</span>
+      </div>
+      <div class="stat-card">
+        <strong>{uniqueTags}</strong>
+        <span>etiket kümesi</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-title">
+      <h2>Bugünün ekranı</h2>
+      <p>En taze iki sayıyı hızlıca aç, sonra akışların derin arşivine in.</p>
+    </div>
+
+    <div class="grid-two">
+      {latestReports.map((report) => (
+        <ReportCard report={report} />
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-title">
+      <h2>Radar Akışları</h2>
+      <p>Her klasör kendi editoryal tonu, RSS’i ve arşivi olan bağımsız bir yayın hattı.</p>
+    </div>
+
+    <div class="grid-two">
+      {feedSummaries.map((summary) => (
+        <FeedCard
+          feed={summary.feed}
+          latestReport={summary.latestReport}
+          totalReports={summary.totalReports}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-title">
+      <h2>Son Sayılar</h2>
+      <p>Federated ana akış, tüm radarların en yeni baskılarını tarih sırasıyla bir araya getirir.</p>
+    </div>
+
+    <div class="grid-two">
+      {recentReports.map((report) => (
+        <ReportCard report={report} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-block + .section-block {
+    margin-top: 1.25rem;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.8fr);
+    gap: 1rem;
+    padding: 1.5rem;
+    background:
+      linear-gradient(135deg, rgba(255, 122, 89, 0.12), transparent 30%),
+      linear-gradient(225deg, rgba(28, 165, 154, 0.12), transparent 32%),
+      var(--panel);
+  }
+
+  .hero__content h1 {
+    margin: 0 0 1rem;
+    font-family: 'Newsreader', serif;
+    font-size: clamp(3rem, 5vw, 4.7rem);
+    line-height: 0.95;
+    max-width: 12ch;
+  }
+
+  .hero__lede {
+    margin: 0 0 1.5rem;
+    font-size: 1.08rem;
+    color: var(--muted);
+    line-height: 1.85;
+    max-width: 62ch;
+  }
+
+  .hero__stats {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .stat-card {
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    min-height: 6rem;
+    display: grid;
+    align-content: end;
+    gap: 0.2rem;
+  }
+
+  .stat-card strong {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+  }
+
+  .stat-card span {
+    color: var(--muted);
+  }
+
+  @media (max-width: 920px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+

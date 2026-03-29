@@ -1,0 +1,456 @@
+---
+import { siteMeta } from '../config/site.js';
+import { withBase } from '../lib/paths.js';
+
+const {
+  title = siteMeta.title,
+  description = siteMeta.description,
+} = Astro.props;
+
+const pageTitle = title === siteMeta.title ? title : `${title} | ${siteMeta.title}`;
+const canonical = Astro.site ? new URL(withBase(Astro.url.pathname), Astro.site).toString() : Astro.url.href;
+const navigation = [
+  { href: withBase(), label: 'Ana Sayfa' },
+  { href: withBase('arsiv/'), label: 'Arşiv' },
+  { href: withBase('rss.xml'), label: 'RSS' },
+];
+
+function isActive(href) {
+  return Astro.url.pathname === new URL(href, Astro.url).pathname;
+}
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#10141d" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="tr_TR" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+      <header class="site-header container">
+        <a class="brand" href={withBase()}>
+          <span class="brand__mark">B</span>
+          <span>
+            <strong>{siteMeta.title}</strong>
+            <small>{siteMeta.tagline}</small>
+          </span>
+        </a>
+        <nav class="nav">
+          {navigation.map((item) => (
+            <a class:list={['nav__link', { 'nav__link--active': isActive(item.href) }]} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </header>
+
+      <main class="container main-content">
+        <slot />
+      </main>
+
+      <footer class="site-footer container">
+        <p>
+          Federated radar akışları, AI-curated markdown sayıları ve ücretsiz GitHub Pages dağıtımı.
+        </p>
+        <div class="footer-links">
+          <a href={withBase('rss.xml')}>Global RSS</a>
+          <a href={withBase('opml.xml')}>OPML</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    --bg: #0b1017;
+    --panel: rgba(16, 22, 32, 0.78);
+    --panel-strong: rgba(13, 18, 28, 0.92);
+    --line: rgba(255, 255, 255, 0.1);
+    --text: #eef3fb;
+    --muted: #a4afc1;
+    --warm: #ff7a59;
+    --cool: #1ca59a;
+    --shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
+    --radius-lg: 32px;
+    --radius-md: 22px;
+    --radius-sm: 16px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background:
+      radial-gradient(circle at top left, rgba(255, 122, 89, 0.18), transparent 36%),
+      radial-gradient(circle at top right, rgba(28, 165, 154, 0.16), transparent 34%),
+      linear-gradient(180deg, #091018 0%, #101723 100%);
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  code,
+  pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .page-shell {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: fixed;
+    inset: auto;
+    width: 24rem;
+    height: 24rem;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(70px);
+    opacity: 0.4;
+    z-index: 0;
+  }
+
+  .orb-one {
+    top: -6rem;
+    right: -3rem;
+    background: rgba(255, 122, 89, 0.26);
+  }
+
+  .orb-two {
+    bottom: -8rem;
+    left: -5rem;
+    background: rgba(28, 165, 154, 0.2);
+  }
+
+  .container {
+    width: min(1180px, calc(100vw - 2rem));
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.25rem 0 0.75rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .brand strong {
+    display: block;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .brand small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .brand__mark {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.95), rgba(28, 165, 154, 0.95));
+    color: #081018;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nav__link {
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  }
+
+  .nav__link:hover,
+  .nav__link--active {
+    color: var(--text);
+    border-color: var(--line);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .main-content {
+    padding: 1.2rem 0 4rem;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--warm), var(--cool));
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--text);
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .button--primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, rgba(255, 122, 89, 0.95), rgba(28, 165, 154, 0.9));
+    color: #0d121b;
+    font-weight: 700;
+  }
+
+  .meta-row,
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .meta-pill,
+  .tag-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1rem;
+  }
+
+  .section-title h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2vw, 2.2rem);
+  }
+
+  .section-title p {
+    margin: 0;
+    color: var(--muted);
+    max-width: 42rem;
+  }
+
+  .grid-two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .grid-three {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .site-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 0 2.5rem;
+    color: var(--muted);
+  }
+
+  .site-footer p {
+    margin: 0;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+  }
+
+  .prose {
+    font-family: 'Newsreader', serif;
+    font-size: 1.18rem;
+    line-height: 1.82;
+    color: rgba(238, 243, 251, 0.96);
+  }
+
+  .prose :is(h1, h2, h3, h4) {
+    color: var(--text);
+    line-height: 1.15;
+    scroll-margin-top: 6rem;
+  }
+
+  .prose h1 {
+    font-size: clamp(2rem, 3vw, 3rem);
+  }
+
+  .prose h2 {
+    font-size: clamp(1.7rem, 2vw, 2.15rem);
+    margin-top: 2.4rem;
+  }
+
+  .prose h3 {
+    font-size: 1.35rem;
+    margin-top: 1.8rem;
+  }
+
+  .prose p,
+  .prose ul,
+  .prose ol,
+  .prose blockquote {
+    margin: 1rem 0;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.15rem;
+  }
+
+  .prose li + li {
+    margin-top: 0.45rem;
+  }
+
+  .prose a {
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.24);
+    text-underline-offset: 0.16em;
+  }
+
+  .prose blockquote {
+    margin-left: 0;
+    padding: 1rem 1.1rem;
+    border-left: 3px solid rgba(255, 122, 89, 0.65);
+    border-radius: 0 18px 18px 0;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .prose code {
+    font-size: 0.92rem;
+    padding: 0.08rem 0.35rem;
+    border-radius: 0.45rem;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .prose pre {
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    overflow-x: auto;
+    background: rgba(6, 10, 18, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 920px) {
+    .grid-two,
+    .grid-three,
+    .site-footer {
+      grid-template-columns: 1fr;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .site-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .container {
+      width: min(100vw - 1rem, 1180px);
+    }
+
+    .main-content {
+      padding-top: 0.75rem;
+    }
+  }
+</style>
+

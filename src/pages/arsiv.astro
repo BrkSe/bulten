@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ReportCard from '../components/ReportCard.astro';
+import { getAllReports, formatMonthLabel } from '../lib/reports.js';
+
+const reports = getAllReports();
+
+const groups = Array.from(
+  reports.reduce((map, report) => {
+    const label = formatMonthLabel(report.date);
+
+    if (!map.has(label)) {
+      map.set(label, []);
+    }
+
+    map.get(label).push(report);
+    return map;
+  }, new Map()),
+);
+---
+
+<BaseLayout title="Arşiv">
+  <section class="archive-hero panel">
+    <p class="eyebrow">Tam arşiv</p>
+    <h1>Tüm radar sayıları tek bakışta.</h1>
+    <p>
+      Akış bağımsızlığını korurken, bütün sayılar tek bir kronolojik yayında toplanıyor. Yeni markdown
+      dosyası geldiğinde bu sayfa da kendini otomatik genişletiyor.
+    </p>
+  </section>
+
+  <div class="archive-groups">
+    {groups.map(([label, monthReports]) => (
+      <section class="archive-group">
+        <div class="section-title">
+          <h2>{label}</h2>
+          <p>{monthReports.length} sayı</p>
+        </div>
+
+        <div class="grid-two">
+          {monthReports.map((report) => (
+            <ReportCard report={report} />
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .archive-hero {
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .archive-hero h1 {
+    margin: 0 0 0.8rem;
+    font-family: 'Newsreader', serif;
+    font-size: clamp(2.6rem, 4vw, 3.6rem);
+  }
+
+  .archive-hero p:last-child {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 62ch;
+  }
+
+  .archive-groups {
+    display: grid;
+    gap: 1.35rem;
+  }
+</style>
+

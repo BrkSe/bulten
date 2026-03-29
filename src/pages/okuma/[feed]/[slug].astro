@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Toc from '../../../components/Toc.astro';
+import { withBase } from '../../../lib/paths.js';
+import { getAllReports, getReportsByFeedId, formatDateLong } from '../../../lib/reports.js';
+
+export function getStaticPaths() {
+  return getAllReports().map((report) => ({
+    params: {
+      feed: report.feed.id,
+      slug: report.slug,
+    },
+    props: { report },
+  }));
+}
+
+const { report } = Astro.props;
+const feedReports = getReportsByFeedId(report.feed.id);
+const currentIndex = feedReports.findIndex((item) => item.slug === report.slug);
+const newerReport = currentIndex > 0 ? feedReports[currentIndex - 1] : null;
+const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentIndex + 1] : null;
+---
+
+<BaseLayout title={report.title} description={report.excerpt}>
+  <section class="article-hero panel" style={`--article-accent: ${report.feed.accent};`}>
+    <div class="article-hero__body">
+      <a class="article-hero__source" href={withBase(report.feedRoute)}>{report.feed.shortTitle}</a>
+      <h1>{report.title}</h1>
+      <p>{report.excerpt}</p>
+
+      <div class="meta-row">
+        <span class="meta-pill">{formatDateLong(report.date)}</span>
+        <span class="meta-pill">{report.readingMinutes} dk okuma</span>
+        <span class="meta-pill">{report.wordCount} kelime</span>
+        <span class="meta-pill">{report.sourcePath}</span>
+      </div>
+
+      {report.tags.length > 0 && (
+        <div class="pill-row">
+          {report.tags.map((tag) => (
+            <span class="tag-pill">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="article-grid">
+    <article class="panel article-panel">
+      <div class="prose" set:html={report.html}></div>
+    </article>
+
+    <Toc headings={report.headings} />
+  </section>
+
+  <section class="article-nav panel">
+    <div class="article-nav__item">
+      <small>Daha yeni</small>
+      {newerReport ? (
+        <a href={withBase(newerReport.route)}>{newerReport.title}</a>
+      ) : (
+        <span>Bu akışın en yeni sayısı.</span>
+      )}
+    </div>
+
+    <div class="article-nav__item article-nav__item--center">
+      <small>Akış</small>
+      <a href={withBase(report.feedRoute)}>{report.feed.shortTitle} arşivi</a>
+    </div>
+
+    <div class="article-nav__item article-nav__item--right">
+      <small>Daha eski</small>
+      {olderReport ? (
+        <a href={withBase(olderReport.route)}>{olderReport.title}</a>
+      ) : (
+        <span>Bu akışın ilk sayısı.</span>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .article-hero {
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+    border-color: color-mix(in srgb, var(--article-accent) 28%, rgba(255, 255, 255, 0.08));
+    background:
+      radial-gradient(circle at top right, color-mix(in srgb, var(--article-accent) 14%, transparent), transparent 36%),
+      var(--panel);
+  }
+
+  .article-hero__source {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.85rem;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+  }
+
+  .article-hero h1 {
+    margin: 0 0 0.9rem;
+    font-family: 'Newsreader', serif;
+    font-size: clamp(2.8rem, 4.4vw, 4.4rem);
+    line-height: 0.98;
+    max-width: 14ch;
+  }
+
+  .article-hero p {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.82;
+    max-width: 68ch;
+  }
+
+  .article-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .article-panel {
+    padding: clamp(1.2rem, 3vw, 2rem);
+    background: var(--panel-strong);
+  }
+
+  .article-nav {
+    margin-top: 1.2rem;
+    padding: 1.15rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .article-nav__item {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .article-nav__item--center {
+    text-align: center;
+  }
+
+  .article-nav__item--right {
+    text-align: right;
+  }
+
+  .article-nav small {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .article-nav a {
+    font-size: 1rem;
+  }
+
+  .article-nav span {
+    color: var(--muted);
+  }
+
+  @media (max-width: 980px) {
+    .article-grid,
+    .article-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .article-nav__item--center,
+    .article-nav__item--right {
+      text-align: left;
+    }
+  }
+</style>

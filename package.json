@@ -1,0 +1,28 @@
+{
+  "name": "bulten",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Federated, AI-curated, fully static newsletter surface for daily radar markdown files.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "publish:reports": "bash ./scripts/publish-reports.sh"
+  },
+  "keywords": [
+    "astro",
+    "github-pages",
+    "newsletter",
+    "markdown"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/rss": "^4.0.18",
+    "astro": "^5.18.1",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0"
+  }
+}

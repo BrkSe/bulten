@@ -1,0 +1,68 @@
+---
+import { withBase } from '../lib/paths.js';
+import { formatDateLong } from '../lib/reports.js';
+
+const { report, showFeed = true } = Astro.props;
+---
+
+<article class="report-card panel" style={`--report-accent: ${report.feed.accent};`}>
+  <div class="report-card__meta">
+    <span class="meta-pill">{formatDateLong(report.date)}</span>
+    {showFeed && (
+      <a class="meta-pill report-card__feed-link" href={withBase(report.feedRoute)}>
+        {report.feed.shortTitle}
+      </a>
+    )}
+    <span class="meta-pill">{report.readingMinutes} dk</span>
+  </div>
+
+  <h3>
+    <a href={withBase(report.route)}>{report.title}</a>
+  </h3>
+
+  <p>{report.excerpt}</p>
+
+  {report.tags.length > 0 && (
+    <div class="pill-row">
+      {report.tags.slice(0, 4).map((tag) => (
+        <span class="tag-pill">{tag}</span>
+      ))}
+    </div>
+  )}
+</article>
+
+<style>
+  .report-card {
+    padding: 1.35rem;
+    display: grid;
+    gap: 1rem;
+    border-color: color-mix(in srgb, var(--report-accent) 24%, rgba(255, 255, 255, 0.08));
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(8, 13, 20, 0.9)),
+      radial-gradient(circle at top right, color-mix(in srgb, var(--report-accent) 13%, transparent), transparent 36%);
+  }
+
+  .report-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: center;
+  }
+
+  .report-card__feed-link:hover {
+    color: var(--text);
+  }
+
+  .report-card h3 {
+    margin: 0;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    line-height: 1.15;
+  }
+
+  .report-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+</style>
+

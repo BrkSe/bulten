@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ReportCard from '../../../components/ReportCard.astro';
+import { withBase } from '../../../lib/paths.js';
+import { getFeeds, getReportsByFeedId } from '../../../lib/reports.js';
+
+export function getStaticPaths() {
+  return getFeeds().map((feed) => ({
+    params: { feed: feed.id },
+    props: {
+      feed,
+      reports: getReportsByFeedId(feed.id),
+    },
+  }));
+}
+
+const { feed, reports } = Astro.props;
+const latestReport = reports[0] ?? null;
+---
+
+<BaseLayout title={feed.shortTitle} description={feed.description}>
+  <section class="source-hero panel" style={`--source-accent: ${feed.accent};`}>
+    <div class="source-hero__copy">
+      <p class="eyebrow">{feed.badge}</p>
+      <h1>{feed.title}</h1>
+      <p>{feed.strap}</p>
+
+      <div class="meta-row">
+        <span class="meta-pill">{reports.length} sayı</span>
+        <span class="meta-pill">Otomasyon: {feed.automationName}</span>
+        <span class="meta-pill">Klasör: {feed.directory}</span>
+      </div>
+    </div>
+
+    <div class="source-hero__actions">
+      <a class="button button--primary" href={latestReport ? withBase(latestReport.route) : withBase()}>
+        {latestReport ? 'En yeni sayıyı aç' : 'Ana sayfa'}
+      </a>
+      <a class="button" href={withBase(`kaynak/${feed.id}/rss.xml`)}>Akış RSS</a>
+      <a class="button" href={withBase('opml.xml')}>OPML</a>
+    </div>
+  </section>
+
+  {latestReport && (
+    <section class="section-block">
+      <div class="section-title">
+        <h2>Öne çıkan sayı</h2>
+        <p>Bu akışın en son yayınlanan baskısı.</p>
+      </div>
+
+      <ReportCard report={latestReport} showFeed={false} />
+    </section>
+  )}
+
+  <section class="section-block">
+    <div class="section-title">
+      <h2>Akış arşivi</h2>
+      <p>Tüm sayılar tarih sırasıyla burada tutulur.</p>
+    </div>
+
+    <div class="grid-two">
+      {reports.map((report) => (
+        <ReportCard report={report} showFeed={false} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-block + .section-block {
+    margin-top: 1.2rem;
+  }
+
+  .source-hero {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    border-color: color-mix(in srgb, var(--source-accent) 30%, rgba(255, 255, 255, 0.08));
+    background:
+      radial-gradient(circle at top right, color-mix(in srgb, var(--source-accent) 15%, transparent), transparent 34%),
+      var(--panel);
+  }
+
+  .source-hero h1 {
+    margin: 0 0 0.8rem;
+    font-family: 'Newsreader', serif;
+    font-size: clamp(2.7rem, 4vw, 3.8rem);
+    line-height: 0.98;
+    max-width: 16ch;
+  }
+
+  .source-hero p:last-of-type {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 60ch;
+  }
+
+  .source-hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 900px) {
+    .source-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .source-hero__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
