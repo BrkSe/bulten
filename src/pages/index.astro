@@ -107,8 +107,8 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
     gap: 1rem;
     padding: 1.5rem;
     background:
-      linear-gradient(135deg, rgba(255, 122, 89, 0.12), transparent 30%),
-      linear-gradient(225deg, rgba(28, 165, 154, 0.12), transparent 32%),
+      linear-gradient(135deg, rgba(201, 108, 69, 0.11), transparent 30%),
+      linear-gradient(225deg, rgba(47, 125, 116, 0.11), transparent 32%),
       var(--panel);
   }
 
@@ -116,8 +116,9 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
     margin: 0 0 1rem;
     font-family: 'Newsreader', serif;
     font-size: clamp(3rem, 5vw, 4.7rem);
-    line-height: 0.95;
+    line-height: 1;
     max-width: 12ch;
+    color: var(--text-strong);
   }
 
   .hero__lede {
@@ -136,8 +137,8 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
   .stat-card {
     padding: 1rem 1.1rem;
     border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid var(--line);
     min-height: 6rem;
     display: grid;
     align-content: end;
@@ -146,6 +147,7 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
 
   .stat-card strong {
     font-size: clamp(1.8rem, 3vw, 2.6rem);
+    color: var(--text-strong);
   }
 
   .stat-card span {
@@ -158,4 +160,3 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
     }
   }
 </style>
-

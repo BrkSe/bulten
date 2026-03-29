@@ -77,9 +77,9 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
   .article-hero {
     padding: 1.5rem;
     margin-bottom: 1.2rem;
-    border-color: color-mix(in srgb, var(--article-accent) 28%, rgba(255, 255, 255, 0.08));
+    border-color: color-mix(in srgb, var(--article-accent) 28%, var(--line-strong));
     background:
-      radial-gradient(circle at top right, color-mix(in srgb, var(--article-accent) 14%, transparent), transparent 36%),
+      radial-gradient(circle at top right, color-mix(in srgb, var(--article-accent) 14%, rgba(255, 255, 255, 0.9)), transparent 36%),
       var(--panel);
   }
 
@@ -90,8 +90,8 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     margin-bottom: 0.85rem;
     padding: 0.45rem 0.7rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid var(--line);
     color: var(--muted);
   }
 
@@ -108,8 +108,8 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     align-items: center;
     padding: 0.45rem 0.75rem;
     border-radius: 999px;
-    color: #0b1118;
-    background: color-mix(in srgb, var(--article-accent) 88%, white 12%);
+    color: #fff7ef;
+    background: color-mix(in srgb, var(--article-accent) 88%, black 5%);
     font-weight: 700;
   }
 
@@ -117,8 +117,9 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
     margin: 0 0 0.9rem;
     font-family: 'Newsreader', serif;
     font-size: clamp(2.8rem, 4.4vw, 4.4rem);
-    line-height: 0.98;
+    line-height: 1.02;
     max-width: 14ch;
+    color: var(--text-strong);
   }
 
   .article-hero p {
@@ -138,6 +139,10 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
   .article-panel {
     padding: clamp(1.2rem, 3vw, 2rem);
     background: var(--panel-strong);
+  }
+
+  .article-panel .prose {
+    max-width: 68ch;
   }
 
   .article-nav {
@@ -170,6 +175,7 @@ const olderReport = currentIndex < feedReports.length - 1 ? feedReports[currentI
 
   .article-nav a {
     font-size: 1rem;
+    color: var(--text-strong);
   }
 
   .article-nav span {

@@ -76,9 +76,9 @@ const latestReport = reports[0] ?? null;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 1rem;
-    border-color: color-mix(in srgb, var(--source-accent) 30%, rgba(255, 255, 255, 0.08));
+    border-color: color-mix(in srgb, var(--source-accent) 30%, var(--line-strong));
     background:
-      radial-gradient(circle at top right, color-mix(in srgb, var(--source-accent) 15%, transparent), transparent 34%),
+      radial-gradient(circle at top right, color-mix(in srgb, var(--source-accent) 15%, rgba(255, 255, 255, 0.9)), transparent 34%),
       var(--panel);
   }
 
@@ -86,8 +86,9 @@ const latestReport = reports[0] ?? null;
     margin: 0 0 0.8rem;
     font-family: 'Newsreader', serif;
     font-size: clamp(2.7rem, 4vw, 3.8rem);
-    line-height: 0.98;
+    line-height: 1.02;
     max-width: 16ch;
+    color: var(--text-strong);
   }
 
   .source-hero p:last-of-type {
@@ -115,4 +116,3 @@ const latestReport = reports[0] ?? null;
     }
   }
 </style>
-

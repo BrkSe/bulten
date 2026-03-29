@@ -8,7 +8,7 @@ const {
 } = Astro.props;
 
 const pageTitle = title === siteMeta.title ? title : `${title} | ${siteMeta.title}`;
-const canonical = Astro.site ? new URL(withBase(Astro.url.pathname), Astro.site).toString() : Astro.url.href;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.href;
 const navigation = [
   { href: withBase(), label: 'Ana Sayfa' },
   { href: withBase('arsiv/'), label: 'Arşiv' },
@@ -28,7 +28,7 @@ function isActive(href) {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#10141d" />
+    <meta name="theme-color" content="#f3ecdf" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -82,16 +82,20 @@ function isActive(href) {
 
 <style is:global>
   :root {
-    color-scheme: dark;
-    --bg: #0b1017;
-    --panel: rgba(16, 22, 32, 0.78);
-    --panel-strong: rgba(13, 18, 28, 0.92);
-    --line: rgba(255, 255, 255, 0.1);
-    --text: #eef3fb;
-    --muted: #a4afc1;
-    --warm: #ff7a59;
-    --cool: #1ca59a;
-    --shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
+    color-scheme: light;
+    --bg: #f3ecdf;
+    --bg-soft: #fbf6ec;
+    --panel: rgba(255, 251, 243, 0.88);
+    --panel-strong: rgba(255, 253, 249, 0.96);
+    --line: rgba(58, 46, 31, 0.12);
+    --line-strong: rgba(58, 46, 31, 0.18);
+    --text: #24303a;
+    --text-strong: #141b22;
+    --muted: #5f655f;
+    --warm: #c96c45;
+    --cool: #2f7d74;
+    --shadow: 0 24px 60px rgba(79, 56, 24, 0.08);
+    --shadow-soft: 0 16px 36px rgba(79, 56, 24, 0.07);
     --radius-lg: 32px;
     --radius-md: 22px;
     --radius-sm: 16px;
@@ -102,10 +106,11 @@ function isActive(href) {
   }
 
   html {
+    scroll-behavior: smooth;
     background:
-      radial-gradient(circle at top left, rgba(255, 122, 89, 0.18), transparent 36%),
-      radial-gradient(circle at top right, rgba(28, 165, 154, 0.16), transparent 34%),
-      linear-gradient(180deg, #091018 0%, #101723 100%);
+      radial-gradient(circle at top left, rgba(201, 108, 69, 0.13), transparent 36%),
+      radial-gradient(circle at top right, rgba(47, 125, 116, 0.12), transparent 34%),
+      linear-gradient(180deg, #f8f2e8 0%, #efe6d7 100%);
     min-height: 100%;
   }
 
@@ -113,6 +118,7 @@ function isActive(href) {
     margin: 0;
     color: var(--text);
     font-family: 'Space Grotesk', sans-serif;
+    background: transparent;
     min-height: 100vh;
   }
 
@@ -129,7 +135,7 @@ function isActive(href) {
   .page-shell {
     position: relative;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: clip;
   }
 
   .orb {
@@ -140,20 +146,20 @@ function isActive(href) {
     border-radius: 999px;
     pointer-events: none;
     filter: blur(70px);
-    opacity: 0.4;
+    opacity: 0.55;
     z-index: 0;
   }
 
   .orb-one {
     top: -6rem;
     right: -3rem;
-    background: rgba(255, 122, 89, 0.26);
+    background: rgba(201, 108, 69, 0.22);
   }
 
   .orb-two {
     bottom: -8rem;
     left: -5rem;
-    background: rgba(28, 165, 154, 0.2);
+    background: rgba(47, 125, 116, 0.18);
   }
 
   .container {
@@ -168,7 +174,7 @@ function isActive(href) {
     justify-content: space-between;
     gap: 1rem;
     align-items: center;
-    padding: 1.25rem 0 0.75rem;
+    padding: 1.35rem 0 0.85rem;
   }
 
   .brand {
@@ -181,6 +187,7 @@ function isActive(href) {
     display: block;
     font-size: 1rem;
     letter-spacing: 0.02em;
+    color: var(--text-strong);
   }
 
   .brand small {
@@ -195,10 +202,10 @@ function isActive(href) {
     display: grid;
     place-items: center;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(255, 122, 89, 0.95), rgba(28, 165, 154, 0.95));
-    color: #081018;
+    background: linear-gradient(135deg, rgba(201, 108, 69, 0.96), rgba(47, 125, 116, 0.96));
+    color: #fff8f0;
     font-weight: 700;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-soft);
   }
 
   .nav {
@@ -212,14 +219,15 @@ function isActive(href) {
     border-radius: 999px;
     color: var(--muted);
     border: 1px solid transparent;
-    transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+    transition: border-color 160ms ease, color 160ms ease, background 160ms ease, transform 160ms ease;
   }
 
   .nav__link:hover,
   .nav__link--active {
-    color: var(--text);
-    border-color: var(--line);
-    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-strong);
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
   }
 
   .main-content {
@@ -231,7 +239,7 @@ function isActive(href) {
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(14px);
   }
 
   .eyebrow {
@@ -265,21 +273,23 @@ function isActive(href) {
     justify-content: center;
     padding: 0.9rem 1.1rem;
     border-radius: 999px;
-    border: 1px solid var(--line);
-    color: var(--text);
-    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+    border: 1px solid var(--line-strong);
+    color: var(--text-strong);
+    background: rgba(255, 255, 255, 0.56);
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
   }
 
   .button:hover {
     transform: translateY(-1px);
-    border-color: rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: color-mix(in srgb, var(--cool) 32%, var(--line-strong));
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: var(--shadow-soft);
   }
 
   .button--primary {
     border-color: transparent;
-    background: linear-gradient(135deg, rgba(255, 122, 89, 0.95), rgba(28, 165, 154, 0.9));
-    color: #0d121b;
+    background: linear-gradient(135deg, rgba(201, 108, 69, 0.96), rgba(47, 125, 116, 0.92));
+    color: #fff7ef;
     font-weight: 700;
   }
 
@@ -297,8 +307,8 @@ function isActive(href) {
     align-items: center;
     padding: 0.45rem 0.7rem;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid var(--line);
     color: var(--muted);
     font-size: 0.82rem;
   }
@@ -314,6 +324,7 @@ function isActive(href) {
   .section-title h2 {
     margin: 0;
     font-size: clamp(1.6rem, 2vw, 2.2rem);
+    color: var(--text-strong);
   }
 
   .section-title p {
@@ -358,14 +369,14 @@ function isActive(href) {
 
   .prose {
     font-family: 'Newsreader', serif;
-    font-size: 1.18rem;
-    line-height: 1.82;
-    color: rgba(238, 243, 251, 0.96);
+    font-size: clamp(1.14rem, 1.05rem + 0.28vw, 1.3rem);
+    line-height: 1.9;
+    color: #2a343d;
   }
 
   .prose :is(h1, h2, h3, h4) {
-    color: var(--text);
-    line-height: 1.15;
+    color: var(--text-strong);
+    line-height: 1.12;
     scroll-margin-top: 6rem;
   }
 
@@ -387,7 +398,7 @@ function isActive(href) {
   .prose ul,
   .prose ol,
   .prose blockquote {
-    margin: 1rem 0;
+    margin: 1.05rem 0;
   }
 
   .prose ul,
@@ -400,39 +411,43 @@ function isActive(href) {
   }
 
   .prose a {
+    color: var(--cool);
     text-decoration: underline;
-    text-decoration-color: rgba(255, 255, 255, 0.24);
+    text-decoration-color: color-mix(in srgb, var(--cool) 30%, transparent);
     text-underline-offset: 0.16em;
   }
 
   .prose blockquote {
     margin-left: 0;
     padding: 1rem 1.1rem;
-    border-left: 3px solid rgba(255, 122, 89, 0.65);
+    border-left: 3px solid rgba(201, 108, 69, 0.7);
     border-radius: 0 18px 18px 0;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(201, 108, 69, 0.08);
   }
 
   .prose code {
     font-size: 0.92rem;
     padding: 0.08rem 0.35rem;
     border-radius: 0.45rem;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(47, 125, 116, 0.08);
   }
 
   .prose pre {
     padding: 1rem 1.1rem;
     border-radius: 1rem;
     overflow-x: auto;
-    background: rgba(6, 10, 18, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #1a2430;
+    border: 1px solid rgba(19, 28, 39, 0.18);
+    color: #eef3fb;
   }
 
   @media (max-width: 920px) {
     .grid-two,
-    .grid-three,
-    .site-footer {
+    .grid-three {
       grid-template-columns: 1fr;
+    }
+
+    .site-footer {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -453,4 +468,3 @@ function isActive(href) {
     }
   }
 </style>
-

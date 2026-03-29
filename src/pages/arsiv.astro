@@ -5,6 +5,40 @@ import { getAllReports, formatMonthLabel } from '../lib/reports.js';
 
 const reports = getAllReports();
 
+const feedFilters = Array.from(
+  reports.reduce((map, report) => {
+    const existing = map.get(report.feed.id);
+
+    if (existing) {
+      existing.count += 1;
+      return map;
+    }
+
+    map.set(report.feed.id, {
+      id: report.feed.id,
+      label: report.feed.shortTitle,
+      accent: report.feed.accent,
+      count: 1,
+    });
+
+    return map;
+  }, new Map()),
+  ([, value]) => value,
+);
+
+const tagFilters = Array.from(
+  reports.reduce((map, report) => {
+    report.tags.forEach((tag) => {
+      map.set(tag, (map.get(tag) ?? 0) + 1);
+    });
+
+    return map;
+  }, new Map()),
+  ([label, count]) => ({ label, count }),
+)
+  .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label, 'tr'))
+  .slice(0, 14);
+
 const groups = Array.from(
   reports.reduce((map, report) => {
     const label = formatMonthLabel(report.date);
@@ -20,43 +54,143 @@ const groups = Array.from(
 ---
 
 <BaseLayout title="Arşiv">
-  <section class="archive-hero panel">
-    <p class="eyebrow">Tam arşiv</p>
-    <h1>Tüm radar sayıları tek bakışta.</h1>
-    <p>
-      Akış bağımsızlığını korurken, bütün sayılar tek bir kronolojik yayında toplanıyor. Yeni markdown
-      dosyası geldiğinde bu sayfa da kendini otomatik genişletiyor.
-    </p>
-  </section>
+  <div class="archive-stack">
+    <section class="archive-hero panel">
+      <p class="eyebrow">Tam arşiv</p>
+      <h1>Tüm radar sayıları tek bakışta.</h1>
+      <p>
+        Akış bağımsızlığını korurken, bütün sayılar tek bir kronolojik yayında toplanıyor. Yeni markdown
+        dosyası geldiğinde bu sayfa da kendini otomatik genişletiyor.
+      </p>
+    </section>
 
-  <div class="archive-groups">
-    {groups.map(([label, monthReports]) => (
-      <section class="archive-group">
-        <div class="section-title">
-          <h2>{label}</h2>
-          <p>{monthReports.length} sayı</p>
+    <section class="archive-toolbar panel" data-filter-root>
+      <div class="archive-toolbar__top">
+        <div>
+          <p class="eyebrow">Hızlı filtre</p>
+          <h2>Aradığın sayıyı saniyeler içinde bul.</h2>
         </div>
 
-        <div class="grid-two">
-          {monthReports.map((report) => (
-            <ReportCard report={report} />
+        <div class="archive-toolbar__summary">
+          <strong data-results-count>{reports.length}</strong>
+          <span>sonuç</span>
+          <button class="button" type="button" data-reset>Temizle</button>
+        </div>
+      </div>
+
+      <label class="filter-search">
+        <span>Başlık, özet veya etiket ara</span>
+        <input
+          type="search"
+          name="q"
+          placeholder="Örn. AI agent, Spring Boot, veri katmanı..."
+          autocomplete="off"
+          data-search
+        />
+      </label>
+
+      <div class="filter-block">
+        <div class="filter-block__label">Kaynak</div>
+        <div class="filter-chip-row" role="group" aria-label="Kaynak filtreleri">
+          <button class="filter-chip is-active" type="button" data-feed-filter="" data-filter-label="Tümü">
+            <span>Tümü</span>
+            <small>{reports.length}</small>
+          </button>
+
+          {feedFilters.map((feed) => (
+            <button
+              class="filter-chip"
+              type="button"
+              style={`--filter-accent: ${feed.accent};`}
+              data-feed-filter={feed.id}
+              data-filter-label={feed.label}
+            >
+              <span>{feed.label}</span>
+              <small>{feed.count}</small>
+            </button>
           ))}
         </div>
-      </section>
-    ))}
+      </div>
+
+      {tagFilters.length > 0 && (
+        <div class="filter-block">
+          <div class="filter-block__label">Etiket</div>
+          <div class="filter-chip-row" role="group" aria-label="Etiket filtreleri">
+            <button class="filter-chip is-active" type="button" data-tag-filter="" data-filter-label="Tümü">
+              <span>Tümü</span>
+            </button>
+
+            {tagFilters.map((tag) => (
+              <button
+                class="filter-chip"
+                type="button"
+                data-tag-filter={tag.label.toLocaleLowerCase('tr-TR')}
+                data-filter-label={tag.label}
+              >
+                <span>{tag.label}</span>
+                <small>{tag.count}</small>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <p class="active-filters" data-active-filters hidden></p>
+    </section>
+
+    <section class="archive-empty panel" data-empty-state hidden>
+      <p class="eyebrow">Sonuç yok</p>
+      <h3>Bu filtrelerle eşleşen sayı bulunamadı.</h3>
+      <p>Aramayı sadeleştirip başka bir kaynak veya etiket deneyebilirsin.</p>
+    </section>
+
+    <div class="archive-groups">
+      {groups.map(([label, monthReports]) => (
+        <section class="archive-group" data-month-group>
+          <div class="section-title">
+            <h2>{label}</h2>
+            <p><span data-group-count>{monthReports.length}</span> sayı</p>
+          </div>
+
+          <div class="grid-two">
+            {monthReports.map((report) => (
+              <div
+                class="archive-card"
+                data-report-card
+                data-feed={report.feed.id}
+                data-tags={report.tags.map((tag) => tag.toLocaleLowerCase('tr-TR')).join('|')}
+                data-search={[report.title, report.excerpt, report.feed.shortTitle, ...report.tags]
+                  .join(' ')
+                  .toLocaleLowerCase('tr-TR')}
+              >
+                <ReportCard report={report} />
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
   </div>
 </BaseLayout>
 
 <style>
+  .archive-stack {
+    display: grid;
+    gap: 1.25rem;
+  }
+
   .archive-hero {
-    padding: 1.5rem;
-    margin-bottom: 1.25rem;
+    padding: clamp(1.4rem, 3vw, 2rem);
+    background:
+      radial-gradient(circle at top right, rgba(47, 125, 116, 0.09), transparent 32%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 248, 238, 0.94));
   }
 
   .archive-hero h1 {
     margin: 0 0 0.8rem;
     font-family: 'Newsreader', serif;
     font-size: clamp(2.6rem, 4vw, 3.6rem);
+    color: var(--text-strong);
   }
 
   .archive-hero p:last-child {
@@ -70,5 +204,294 @@ const groups = Array.from(
     display: grid;
     gap: 1.35rem;
   }
+
+  .archive-toolbar {
+    padding: clamp(1.2rem, 2.8vw, 1.7rem);
+    display: grid;
+    gap: 1.15rem;
+    background:
+      radial-gradient(circle at top left, rgba(201, 108, 69, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 251, 244, 0.95));
+  }
+
+  .archive-toolbar__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .archive-toolbar__top h2 {
+    margin: 0;
+    font-family: 'Newsreader', serif;
+    font-size: clamp(1.8rem, 2.6vw, 2.45rem);
+    color: var(--text-strong);
+  }
+
+  .archive-toolbar__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .archive-toolbar__summary strong {
+    font-size: clamp(1.9rem, 2vw, 2.3rem);
+    line-height: 1;
+    color: var(--text-strong);
+  }
+
+  .filter-search {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .filter-search span {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .filter-search input {
+    width: 100%;
+    padding: 0.95rem 1.05rem;
+    border-radius: 18px;
+    border: 1px solid var(--line-strong);
+    background: rgba(255, 255, 255, 0.84);
+    color: var(--text-strong);
+    font: inherit;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .filter-search input::placeholder {
+    color: color-mix(in srgb, var(--muted) 86%, white 14%);
+  }
+
+  .filter-search input:focus {
+    outline: 2px solid color-mix(in srgb, var(--cool) 30%, transparent);
+    outline-offset: 2px;
+    border-color: color-mix(in srgb, var(--cool) 28%, var(--line-strong));
+  }
+
+  .filter-block {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .filter-block__label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+  }
+
+  .filter-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.72rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.58);
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .filter-chip:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--filter-accent, var(--cool)) 32%, var(--line-strong));
+    color: var(--text-strong);
+    background: rgba(255, 255, 255, 0.84);
+  }
+
+  .filter-chip.is-active {
+    color: var(--text-strong);
+    border-color: color-mix(in srgb, var(--filter-accent, var(--cool)) 40%, var(--line-strong));
+    background: color-mix(in srgb, var(--filter-accent, var(--cool)) 10%, rgba(255, 255, 255, 0.9));
+    box-shadow: var(--shadow-soft);
+  }
+
+  .filter-chip small {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .active-filters {
+    margin: 0;
+    padding-top: 0.15rem;
+    color: var(--muted);
+    font-size: 0.94rem;
+  }
+
+  .archive-empty {
+    padding: 1.6rem;
+    text-align: center;
+    background:
+      radial-gradient(circle at top, rgba(201, 108, 69, 0.08), transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 249, 241, 0.95));
+  }
+
+  .archive-empty h3 {
+    margin: 0 0 0.65rem;
+    font-family: 'Newsreader', serif;
+    font-size: 2rem;
+    color: var(--text-strong);
+  }
+
+  .archive-empty p:last-child {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .archive-card[hidden],
+  .archive-group[hidden],
+  .archive-empty[hidden] {
+    display: none !important;
+  }
+
+  @media (max-width: 720px) {
+    .archive-toolbar__summary {
+      align-items: center;
+    }
+  }
 </style>
 
+<script is:inline>
+  const filterRoot = document.querySelector('[data-filter-root]');
+
+  if (filterRoot) {
+    const searchInput = filterRoot.querySelector('[data-search]');
+    const resetButton = filterRoot.querySelector('[data-reset]');
+    const resultCount = filterRoot.querySelector('[data-results-count]');
+    const activeFilters = filterRoot.querySelector('[data-active-filters]');
+    const emptyState = document.querySelector('[data-empty-state]');
+    const cards = Array.from(document.querySelectorAll('[data-report-card]'));
+    const groups = Array.from(document.querySelectorAll('[data-month-group]'));
+    const feedButtons = Array.from(filterRoot.querySelectorAll('[data-feed-filter]'));
+    const tagButtons = Array.from(filterRoot.querySelectorAll('[data-tag-filter]'));
+
+    const state = {
+      search: '',
+      feed: '',
+      tag: '',
+    };
+
+    const normalize = (value) => value.toLocaleLowerCase('tr-TR').trim();
+
+    function setActive(buttons, key, currentValue) {
+      buttons.forEach((button) => {
+        button.classList.toggle('is-active', (button.dataset[key] || '') === currentValue);
+      });
+    }
+
+    function getButtonLabel(buttons, key, currentValue) {
+      return buttons.find((button) => (button.dataset[key] || '') === currentValue)?.dataset.filterLabel || '';
+    }
+
+    function syncGroupCounts() {
+      groups.forEach((group) => {
+        const visibleCards = group.querySelectorAll('[data-report-card]:not([hidden])').length;
+        const countNode = group.querySelector('[data-group-count]');
+
+        if (countNode) {
+          countNode.textContent = String(visibleCards);
+        }
+
+        group.hidden = visibleCards === 0;
+      });
+    }
+
+    function syncSummary(visibleCount) {
+      const summary = [];
+
+      if (state.feed) {
+        summary.push(`Kaynak: ${getButtonLabel(feedButtons, 'feedFilter', state.feed)}`);
+      }
+
+      if (state.tag) {
+        summary.push(`Etiket: ${getButtonLabel(tagButtons, 'tagFilter', state.tag)}`);
+      }
+
+      if (state.search) {
+        summary.push(`Arama: "${searchInput.value.trim()}"`);
+      }
+
+      activeFilters.hidden = summary.length === 0;
+      activeFilters.textContent = summary.join(' • ');
+      emptyState.hidden = visibleCount !== 0;
+    }
+
+    function applyFilters() {
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const matchesFeed = !state.feed || card.dataset.feed === state.feed;
+        const tags = card.dataset.tags ? card.dataset.tags.split('|') : [];
+        const matchesTag = !state.tag || tags.includes(state.tag);
+        const matchesSearch = !state.search || (card.dataset.search || '').includes(state.search);
+        const isVisible = matchesFeed && matchesTag && matchesSearch;
+
+        card.hidden = !isVisible;
+
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      syncGroupCounts();
+      syncSummary(visibleCount);
+      resultCount.textContent = String(visibleCount);
+    }
+
+    function resetFilters() {
+      state.search = '';
+      state.feed = '';
+      state.tag = '';
+      searchInput.value = '';
+      setActive(feedButtons, 'feedFilter', '');
+      setActive(tagButtons, 'tagFilter', '');
+      applyFilters();
+    }
+
+    searchInput?.addEventListener('input', (event) => {
+      state.search = normalize(event.currentTarget.value);
+      applyFilters();
+    });
+
+    feedButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const nextValue = button.dataset.feedFilter || '';
+        state.feed = state.feed === nextValue ? '' : nextValue;
+        setActive(feedButtons, 'feedFilter', state.feed);
+        applyFilters();
+      });
+    });
+
+    tagButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const nextValue = normalize(button.dataset.tagFilter || '');
+        state.tag = state.tag === nextValue ? '' : nextValue;
+        setActive(tagButtons, 'tagFilter', state.tag);
+
+        if (!state.tag) {
+          setActive(tagButtons, 'tagFilter', '');
+        }
+
+        applyFilters();
+      });
+    });
+
+    resetButton?.addEventListener('click', resetFilters);
+    applyFilters();
+  }
+</script>

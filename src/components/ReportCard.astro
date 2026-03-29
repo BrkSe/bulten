@@ -37,10 +37,11 @@ const { report, showFeed = true } = Astro.props;
     padding: 1.35rem;
     display: grid;
     gap: 1rem;
-    border-color: color-mix(in srgb, var(--report-accent) 24%, rgba(255, 255, 255, 0.08));
+    border-color: color-mix(in srgb, var(--report-accent) 24%, var(--line-strong));
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(8, 13, 20, 0.9)),
-      radial-gradient(circle at top right, color-mix(in srgb, var(--report-accent) 13%, transparent), transparent 36%);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 238, 0.96)),
+      radial-gradient(circle at top right, color-mix(in srgb, var(--report-accent) 12%, rgba(255, 255, 255, 0.92)), transparent 40%);
+    box-shadow: var(--shadow-soft);
   }
 
   .report-card__meta {
@@ -51,13 +52,13 @@ const { report, showFeed = true } = Astro.props;
   }
 
   .report-card__feed-link:hover {
-    color: var(--text);
+    color: var(--text-strong);
   }
 
   .meta-pill--issue {
-    color: #0b1118;
+    color: #fff7ef;
     border-color: transparent;
-    background: color-mix(in srgb, var(--report-accent) 88%, white 12%);
+    background: color-mix(in srgb, var(--report-accent) 88%, black 5%);
     font-weight: 700;
   }
 
@@ -65,11 +66,16 @@ const { report, showFeed = true } = Astro.props;
     margin: 0;
     font-size: clamp(1.4rem, 2vw, 1.75rem);
     line-height: 1.15;
+    color: var(--text-strong);
+  }
+
+  .report-card h3 a:hover {
+    color: var(--cool);
   }
 
   .report-card p {
     margin: 0;
-    color: var(--muted);
-    line-height: 1.75;
+    color: color-mix(in srgb, var(--muted) 88%, var(--text));
+    line-height: 1.78;
   }
 </style>
