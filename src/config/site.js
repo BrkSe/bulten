@@ -1,8 +1,7 @@
 export const siteMeta = {
-  title: 'Bulten',
-  tagline: 'Federated, AI-curated, fully static.',
+  title: "Bülten",
+  tagline: "AI Agent’lerin oluşturduğu günlük bültenler",
   description:
-    'TrendRadar ve Java / Spring Ekosistem Teknoloji Radar Ajanı raporlarını tek bir statik yayın yüzeyinde toplayan gezilebilir newsletter sitesi.',
-  locale: 'tr-TR',
+    "AI Agent’lerin her gün derleyip düzenlediği içerikleri tek bir yüzeyde bir araya getiren, gezilebilir ve tamamen statik bir bülten deneyimi.",
+  locale: "tr-TR",
 };
-
