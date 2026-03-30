@@ -205,24 +205,26 @@ const groups = Array.from(
   }
 
   .archive-hero {
-    padding: clamp(1.4rem, 3vw, 2rem);
+    padding: clamp(1.8rem, 3.5vw, 2.5rem);
     background:
       radial-gradient(
-        circle at top right,
-        rgba(47, 125, 116, 0.09),
-        transparent 32%
+        ellipse at 80% 0%,
+        rgba(34, 211, 238, 0.08),
+        transparent 50%
       ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.68),
-        rgba(255, 248, 238, 0.94)
-      );
+      radial-gradient(
+        ellipse at 20% 100%,
+        rgba(129, 140, 248, 0.06),
+        transparent 50%
+      ),
+      var(--panel);
   }
 
   .archive-hero h1 {
     margin: 0 0 0.8rem;
-    font-family: "Newsreader", serif;
-    font-size: clamp(2.6rem, 4vw, 3.6rem);
+    font-family: "Fraunces", serif;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    letter-spacing: -0.03em;
     color: var(--text-strong);
   }
 
@@ -230,7 +232,7 @@ const groups = Array.from(
     margin: 0;
     color: var(--muted);
     line-height: 1.75;
-    max-width: 62ch;
+    max-width: 58ch;
   }
 
   .archive-groups {
@@ -244,15 +246,11 @@ const groups = Array.from(
     gap: 1.15rem;
     background:
       radial-gradient(
-        circle at top left,
-        rgba(201, 108, 69, 0.08),
-        transparent 28%
+        ellipse at 10% 0%,
+        rgba(129, 140, 248, 0.06),
+        transparent 40%
       ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.7),
-        rgba(255, 251, 244, 0.95)
-      );
+      var(--panel);
   }
 
   .archive-toolbar__top {
@@ -265,8 +263,9 @@ const groups = Array.from(
 
   .archive-toolbar__top h2 {
     margin: 0;
-    font-family: "Newsreader", serif;
-    font-size: clamp(1.8rem, 2.6vw, 2.45rem);
+    font-family: "Fraunces", serif;
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    letter-spacing: -0.02em;
     color: var(--text-strong);
   }
 
@@ -279,40 +278,46 @@ const groups = Array.from(
   }
 
   .archive-toolbar__summary strong {
-    font-size: clamp(1.9rem, 2vw, 2.3rem);
+    font-size: clamp(1.6rem, 2vw, 2rem);
     line-height: 1;
-    color: var(--text-strong);
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .filter-search {
     display: grid;
-    gap: 0.55rem;
+    gap: 0.5rem;
   }
 
   .filter-search span {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--muted);
   }
 
   .filter-search input {
     width: 100%;
-    padding: 0.95rem 1.05rem;
-    border-radius: 18px;
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-md);
     border: 1px solid var(--line-strong);
-    background: rgba(255, 255, 255, 0.84);
+    background: var(--surface);
     color: var(--text-strong);
     font: inherit;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
   }
 
   .filter-search input::placeholder {
-    color: color-mix(in srgb, var(--muted) 86%, white 14%);
+    color: var(--muted);
   }
 
   .filter-search input:focus {
-    outline: 2px solid color-mix(in srgb, var(--cool) 30%, transparent);
-    outline-offset: 2px;
-    border-color: color-mix(in srgb, var(--cool) 28%, var(--line-strong));
+    outline: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
   }
 
   .filter-block {
@@ -321,91 +326,82 @@ const groups = Array.from(
   }
 
   .filter-block__label {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     color: var(--muted);
   }
 
   .filter-chip-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.65rem;
+    gap: 0.5rem;
   }
 
   .filter-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.72rem 0.95rem;
+    gap: 0.45rem;
+    padding: 0.6rem 0.9rem;
     border-radius: 999px;
     border: 1px solid var(--line);
-    background: rgba(255, 255, 255, 0.58);
+    background: var(--surface);
     color: var(--muted);
     font: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
     cursor: pointer;
     transition:
-      transform 160ms ease,
-      border-color 160ms ease,
-      background 160ms ease,
-      color 160ms ease,
-      box-shadow 160ms ease;
+      transform 200ms ease,
+      border-color 200ms ease,
+      background 200ms ease,
+      color 200ms ease,
+      box-shadow 200ms ease;
   }
 
   .filter-chip:hover {
     transform: translateY(-1px);
-    border-color: color-mix(
-      in srgb,
-      var(--filter-accent, var(--cool)) 32%,
-      var(--line-strong)
-    );
+    border-color: var(--line-strong);
     color: var(--text-strong);
-    background: rgba(255, 255, 255, 0.84);
+    background: var(--surface-hover);
   }
 
   .filter-chip.is-active {
     color: var(--text-strong);
-    border-color: color-mix(
-      in srgb,
-      var(--filter-accent, var(--cool)) 40%,
-      var(--line-strong)
-    );
-    background: color-mix(
-      in srgb,
-      var(--filter-accent, var(--cool)) 10%,
-      rgba(255, 255, 255, 0.9)
-    );
-    box-shadow: var(--shadow-soft);
+    border-color: rgba(129, 140, 248, 0.35);
+    background: rgba(129, 140, 248, 0.1);
+    box-shadow: 0 0 20px rgba(129, 140, 248, 0.08);
   }
 
   .filter-chip small {
     color: var(--muted);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
   }
 
   .active-filters {
     margin: 0;
     padding-top: 0.15rem;
     color: var(--muted);
-    font-size: 0.94rem;
+    font-size: 0.9rem;
   }
 
   .archive-empty {
-    padding: 1.6rem;
+    padding: 2rem;
     text-align: center;
     background:
-      radial-gradient(circle at top, rgba(201, 108, 69, 0.08), transparent 30%),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.72),
-        rgba(255, 249, 241, 0.95)
-      );
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(129, 140, 248, 0.06),
+        transparent 50%
+      ),
+      var(--panel);
   }
 
   .archive-empty h3 {
     margin: 0 0 0.65rem;
-    font-family: "Newsreader", serif;
-    font-size: 2rem;
+    font-family: "Fraunces", serif;
+    font-size: 1.8rem;
     color: var(--text-strong);
   }
 
