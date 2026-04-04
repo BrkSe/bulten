@@ -18,31 +18,31 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
 ---
 
 <BaseLayout>
-  <section class="hero panel">
+  <section class="hero">
     <div class="hero__content">
-      <p class="eyebrow">Agent content hub</p>
-      <h1><span class="gradient-text">Tek akışta,</span> günlük yayınlar.</h1>
-      <p class="hero__lede">
+      <p class="eyebrow">Agent Content Hub</p>
+      <h1 class="hero__title">
+        Tek akışta,<span class="hero__highlight">günlük yayınlar.</span>
+      </h1>
+      <p>
         Agent'lar her gün web'i tarar, dikkat çeken gelişmeleri seçer ve bunları
         okunabilir günlük bültenlere dönüştürür.
       </p>
 
-      <div class="hero__stats">
-        <span class="stat-item"
-          ><strong>{feedSummaries.length}</strong> Konu</span
-        >
-        <span class="stat-sep">·</span>
-        <span class="stat-item"><strong>{totalReports}</strong> Sayı</span>
-        <span class="stat-sep">·</span>
-        <span class="stat-item"
-          ><strong>{totalReadingMinutes} dk</strong> Okuma</span
-        >
-      </div>
+      <!-- <div class="hero__stats"> -->
+      <!-- <div class="stat-block"> -->
+      <!-- <span class="stat-value">{feedSummaries.length}</span> -->
+      <!-- <span class="stat-label">Konu</span> -->
+      <!-- </div> -->
+      <!-- <div class="stat-block"> -->
+      <!-- <span class="stat-value">{totalReports}</span> -->
+      <!-- <span class="stat-label">Sayı</span> -->
+      <!-- </div> -->
     </div>
+    <!-- </div> -->
   </section>
-
+  <br />
   <section class="section-block">
-    <br />
     <div class="section-title">
       <h2>Bugün</h2>
       <p>En taze bültenler, tıkla oku.</p>
@@ -57,7 +57,7 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
     <div class="section-title">
       <h2>Konular</h2>
       <p>
-        Her klasör kendi editoryal tonu, RSS’i ve arşivi olan bağımsız bir yayın
+        Her klasör kendi editoryal tonu, RSS'i ve arşivi olan bağımsız bir yayın
         hattı.
       </p>
     </div>
@@ -74,79 +74,68 @@ const uniqueTags = new Set(reports.flatMap((report) => report.tags)).size;
       }
     </div>
   </section>
-
-  <!-- <section class="section-block">
-    <div class="section-title">
-      <h2>Son Sayılar</h2>
-      <p>
-        Federated ana akış, tüm radarların en yeni baskılarını tarih sırasıyla
-        bir araya getirir.
-      </p>
-    </div>
-
-    <div class="grid-two">
-      {recentReports.map((report) => <ReportCard report={report} />)}
-    </div>
-  </section> -->
 </BaseLayout>
 
 <style>
   .section-block + .section-block {
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
   }
 
   .hero {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: clamp(2rem, 4vw, 3rem);
-    background:
-      radial-gradient(
-        ellipse at 20% 0%,
-        rgba(129, 140, 248, 0.1),
-        transparent 50%
-      ),
-      radial-gradient(
-        ellipse at 80% 100%,
-        rgba(34, 211, 238, 0.08),
-        transparent 50%
-      ),
-      var(--panel);
+    padding: clamp(1.5rem, 3vw, 2rem) clamp(0.5rem, 1vw, 0.5rem);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
+    border-left: 4px solid var(--primary);
   }
 
   .hero__content h1 {
     margin: 0 0 1.25rem;
-    font-family: "Fraunces", serif;
+    font-family: "Space Grotesk", sans-serif;
     font-size: clamp(2.8rem, 5vw, 4.5rem);
     line-height: 1.05;
+    font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--text-strong);
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .hero__highlight {
+    color: var(--primary);
+    font-style: italic;
   }
 
   .hero__lede {
     margin: 0 0 2rem;
     font-size: 1.05rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     line-height: 1.8;
-    max-width: none;
+    max-width: 60ch;
   }
 
   .hero__stats {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.88rem;
-    color: var(--muted);
+    gap: 2rem;
   }
 
-  .stat-item strong {
-    color: var(--text-strong);
-    font-weight: 600;
+  .stat-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
   }
 
-  .stat-sep {
-    color: var(--muted);
-    opacity: 0.4;
+  .stat-value {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .stat-label {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--outline);
   }
 </style>

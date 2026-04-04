@@ -58,7 +58,7 @@ const groups = Array.from(
 
 <BaseLayout title="Arşiv">
   <div class="archive-stack">
-    <section class="archive-hero panel">
+    <section class="archive-hero">
       <p class="eyebrow">Tam arşiv</p>
       <h1>Tüm radar sayıları tek bakışta.</h1>
       <p>
@@ -67,7 +67,7 @@ const groups = Array.from(
       </p>
     </section>
 
-    <section class="archive-toolbar panel" data-filter-root>
+    <section class="archive-toolbar" data-filter-root>
       <div class="archive-toolbar__top">
         <div>
           <p class="eyebrow">Hızlı filtre</p>
@@ -126,33 +126,10 @@ const groups = Array.from(
         </div>
       </div>
 
-      <!-- {tagFilters.length > 0 && (
-        <div class="filter-block">
-          <div class="filter-block__label">Etiket</div>
-          <div class="filter-chip-row" role="group" aria-label="Etiket filtreleri">
-            <button class="filter-chip is-active" type="button" data-tag-filter="" data-filter-label="Tümü">
-              <span>Tümü</span>
-            </button>
-
-            {tagFilters.map((tag) => (
-              <button
-                class="filter-chip"
-                type="button"
-                data-tag-filter={tag.label.toLocaleLowerCase('tr-TR')}
-                data-filter-label={tag.label}
-              >
-                <span>{tag.label}</span>
-                <small>{tag.count}</small>
-              </button>
-            ))}
-          </div>
-        </div>
-      )} -->
-
       <p class="active-filters" data-active-filters hidden></p>
     </section>
 
-    <section class="archive-empty panel" data-empty-state hidden>
+    <section class="archive-empty" data-empty-state hidden>
       <p class="eyebrow">Sonuç yok</p>
       <h3>Bu filtrelerle eşleşen sayı bulunamadı.</h3>
       <p>Aramayı sadeleştirip başka bir kaynak veya etiket deneyebilirsin.</p>
@@ -206,31 +183,22 @@ const groups = Array.from(
 
   .archive-hero {
     padding: clamp(1.8rem, 3.5vw, 2.5rem);
-    background:
-      radial-gradient(
-        ellipse at 80% 0%,
-        rgba(34, 211, 238, 0.08),
-        transparent 50%
-      ),
-      radial-gradient(
-        ellipse at 20% 100%,
-        rgba(129, 140, 248, 0.06),
-        transparent 50%
-      ),
-      var(--panel);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
+    border-left: 4px solid var(--primary);
   }
 
   .archive-hero h1 {
     margin: 0 0 0.8rem;
-    font-family: "Fraunces", serif;
-    font-size: clamp(2.4rem, 4vw, 3.4rem);
-    letter-spacing: -0.03em;
-    color: var(--text-strong);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--text);
   }
 
   .archive-hero p:last-child {
     margin: 0;
-    color: var(--muted);
+    color: var(--text-secondary);
     line-height: 1.75;
     max-width: 58ch;
   }
@@ -244,13 +212,8 @@ const groups = Array.from(
     padding: clamp(1.2rem, 2.8vw, 1.7rem);
     display: grid;
     gap: 1.15rem;
-    background:
-      radial-gradient(
-        ellipse at 10% 0%,
-        rgba(129, 140, 248, 0.06),
-        transparent 40%
-      ),
-      var(--panel);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
   }
 
   .archive-toolbar__top {
@@ -263,27 +226,25 @@ const groups = Array.from(
 
   .archive-toolbar__top h2 {
     margin: 0;
-    font-family: "Fraunces", serif;
-    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
-    letter-spacing: -0.02em;
-    color: var(--text-strong);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    font-weight: 700;
+    color: var(--text);
   }
 
   .archive-toolbar__summary {
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     flex-wrap: wrap;
   }
 
   .archive-toolbar__summary strong {
+    font-family: "Space Grotesk", sans-serif;
     font-size: clamp(1.6rem, 2vw, 2rem);
     line-height: 1;
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary);
   }
 
   .filter-search {
@@ -293,31 +254,28 @@ const groups = Array.from(
 
   .filter-search span {
     font-size: 0.85rem;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .filter-search input {
     width: 100%;
     padding: 0.85rem 1.1rem;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--outline-variant);
     background: var(--surface);
-    color: var(--text-strong);
+    color: var(--text);
     font: inherit;
     font-size: 0.95rem;
-    transition:
-      border-color 200ms ease,
-      box-shadow 200ms ease;
+    transition: border-color 200ms ease;
   }
 
   .filter-search input::placeholder {
-    color: var(--muted);
+    color: var(--outline);
   }
 
   .filter-search input:focus {
     outline: none;
-    border-color: var(--accent-1);
-    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(159, 255, 136, 0.15);
   }
 
   .filter-block {
@@ -326,11 +284,12 @@ const groups = Array.from(
   }
 
   .filter-block__label {
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--muted);
+    letter-spacing: 0.2em;
+    color: var(--outline);
   }
 
   .filter-chip-row {
@@ -343,71 +302,62 @@ const groups = Array.from(
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.6rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid var(--line);
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--outline-variant);
     background: var(--surface);
-    color: var(--muted);
+    color: var(--text-secondary);
     font: inherit;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     cursor: pointer;
-    transition:
-      transform 200ms ease,
-      border-color 200ms ease,
-      background 200ms ease,
-      color 200ms ease,
-      box-shadow 200ms ease;
+    transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
   }
 
   .filter-chip:hover {
-    transform: translateY(-1px);
-    border-color: var(--line-strong);
-    color: var(--text-strong);
-    background: var(--surface-hover);
+    border-color: var(--outline);
+    color: var(--text);
   }
 
   .filter-chip.is-active {
-    color: var(--text-strong);
-    border-color: rgba(129, 140, 248, 0.35);
-    background: rgba(129, 140, 248, 0.1);
-    box-shadow: 0 0 20px rgba(129, 140, 248, 0.08);
+    color: var(--bg);
+    border-color: var(--primary);
+    background: var(--primary);
   }
 
   .filter-chip small {
-    color: var(--muted);
-    font-size: 0.72rem;
+    color: inherit;
+    opacity: 0.7;
+    font-size: 0.7rem;
   }
 
   .active-filters {
     margin: 0;
     padding-top: 0.15rem;
-    color: var(--muted);
-    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
   }
 
   .archive-empty {
     padding: 2rem;
     text-align: center;
-    background:
-      radial-gradient(
-        ellipse at 50% 0%,
-        rgba(129, 140, 248, 0.06),
-        transparent 50%
-      ),
-      var(--panel);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
   }
 
   .archive-empty h3 {
     margin: 0 0 0.65rem;
-    font-family: "Fraunces", serif;
-    font-size: 1.8rem;
-    color: var(--text-strong);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
   }
 
   .archive-empty p:last-child {
     margin: 0;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .archive-card[hidden],
@@ -500,7 +450,7 @@ const groups = Array.from(
       }
 
       activeFilters.hidden = summary.length === 0;
-      activeFilters.textContent = summary.join(" • ");
+      activeFilters.textContent = summary.join(" \u2022 ");
       emptyState.hidden = visibleCount !== 0;
     }
 

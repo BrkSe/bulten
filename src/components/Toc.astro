@@ -4,7 +4,7 @@ const { headings = [] } = Astro.props;
 
 {
   headings.length > 0 && (
-    <aside class="toc panel">
+    <aside class="toc">
       <p class="eyebrow">İçindekiler</p>
       <ul>
         {headings.map((heading) => (
@@ -20,16 +20,12 @@ const { headings = [] } = Astro.props;
 <style>
   .toc {
     position: sticky;
-    top: 1.5rem;
+    top: 4.5rem;
     padding: 1.25rem;
     align-self: start;
-    background:
-      radial-gradient(
-        ellipse at top right,
-        rgba(129, 140, 248, 0.04),
-        transparent 50%
-      ),
-      var(--panel);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
+    border-left: 4px solid var(--primary);
   }
 
   .toc ul {
@@ -37,25 +33,25 @@ const { headings = [] } = Astro.props;
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 0.7rem;
+    gap: 0.65rem;
   }
 
   .toc li {
     line-height: 1.4;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
 
   .toc li.depth-3 {
     padding-left: 0.85rem;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
   }
 
   .toc a {
-    color: var(--muted);
+    color: var(--text-secondary);
     transition: color 200ms ease;
   }
 
   .toc a:hover {
-    color: var(--accent-1);
+    color: var(--primary);
   }
 </style>

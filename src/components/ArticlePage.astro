@@ -15,7 +15,7 @@ const olderReport =
 
 <BaseLayout title={report.title} description={report.excerpt}>
   <section
-    class="article-hero panel"
+    class="article-hero"
     style={`--article-accent: ${report.feed.accent};`}
   >
     <div class="article-hero__body">
@@ -32,28 +32,18 @@ const olderReport =
         <span class="meta-pill">{formatDateLong(report.date)}</span>
         <span class="meta-pill">{report.readingMinutes} dk okuma</span>
       </div>
-
-      <!-- {
-        report.tags.length > 0 && (
-          <div class="pill-row">
-            {report.tags.map((tag) => (
-              <span class="tag-pill">{tag}</span>
-            ))}
-          </div>
-        )
-      } -->
     </div>
   </section>
 
   <section class="article-grid">
-    <article class="panel article-panel">
+    <article class="article-panel">
       <div class="prose" set:html={report.html} />
     </article>
 
     <Toc headings={report.headings} />
   </section>
 
-  <section class="article-nav panel">
+  <section class="article-nav">
     <div class="article-nav__item">
       <small>Daha yeni</small>
       {
@@ -87,41 +77,30 @@ const olderReport =
   .article-hero {
     padding: clamp(1.8rem, 3.5vw, 2.5rem);
     margin-bottom: 1.2rem;
-    border-color: rgba(255, 255, 255, 0.06);
-    background:
-      radial-gradient(
-        ellipse at top right,
-        color-mix(in srgb, var(--article-accent) 8%, transparent),
-        transparent 55%
-      ),
-      radial-gradient(
-        ellipse at bottom left,
-        rgba(129, 140, 248, 0.04),
-        transparent 50%
-      ),
-      var(--panel);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
+    border-left: 4px solid var(--article-accent);
   }
 
   .article-hero__source {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    margin-bottom: 0.85rem;
-    padding: 0.4rem 0.7rem;
-    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
     background: var(--surface);
-    border: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition:
-      color 200ms ease,
-      border-color 200ms ease;
+    border: 1px solid var(--outline-variant);
+    color: var(--text-secondary);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 200ms ease, border-color 200ms ease;
   }
 
   .article-hero__source:hover {
-    color: var(--text-strong);
-    border-color: var(--line-strong);
+    color: var(--primary);
+    border-color: var(--primary);
   }
 
   .article-hero__topline {
@@ -135,32 +114,30 @@ const olderReport =
   .article-hero__issue {
     display: inline-flex;
     align-items: center;
-    padding: 0.4rem 0.7rem;
-    border-radius: 999px;
-    color: #fff;
-    background: color-mix(
-      in srgb,
-      var(--article-accent) 80%,
-      rgba(0, 0, 0, 0.2)
-    );
-    font-weight: 600;
-    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+    color: var(--bg);
+    background: var(--article-accent);
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
 
   .article-hero h1 {
     margin: 0 0 0.9rem;
-    font-family: "Fraunces", serif;
-    font-size: clamp(2.4rem, 4vw, 3.8rem);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-    color: var(--text-strong);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.1;
+    font-weight: 700;
+    color: var(--text);
   }
 
   .article-hero p {
     margin: 0 0 1rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     line-height: 1.8;
-    font-size: 1.02rem;
+    font-size: 1rem;
   }
 
   .article-grid {
@@ -172,7 +149,8 @@ const olderReport =
 
   .article-panel {
     padding: clamp(1.5rem, 3vw, 2.2rem);
-    background: var(--panel-strong);
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
   }
 
   .article-panel .prose {
@@ -185,6 +163,8 @@ const olderReport =
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+    background: var(--surface-low);
+    border: 1px solid var(--outline-variant);
   }
 
   .article-nav__item {
@@ -201,26 +181,27 @@ const olderReport =
   }
 
   .article-nav small {
+    font-family: "Space Grotesk", sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--muted);
-    font-size: 0.68rem;
-    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--outline);
+    font-size: 0.65rem;
+    font-weight: 700;
   }
 
   .article-nav a {
-    font-size: 0.95rem;
-    color: var(--text-strong);
+    font-size: 0.92rem;
+    color: var(--text);
     transition: color 200ms ease;
   }
 
   .article-nav a:hover {
-    color: var(--accent-1);
+    color: var(--primary);
   }
 
   .article-nav span {
-    color: var(--muted);
-    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
   }
 
   @media (max-width: 980px) {
