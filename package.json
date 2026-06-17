@@ -28,7 +28,7 @@
     "@astrojs/rss": "^4.0.18",
     "astro": "^6.1.1",
     "gray-matter": "^4.0.3",
-    "markdown-it": "^14.1.1",
+    "markdown-it": "^14.2.0",
     "markdown-it-anchor": "^9.2.0"
   }
 }
